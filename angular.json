@@ -28,9 +28,56 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/styles.css",
+              "src/assets/js/cuber/build/styles/cube.css",
+              "src/assets/js/cuber/examples/basic/styles/base.css",
+              "src/assets/js/cuber/src/styles/cube.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/js/cuber/src/scripts/vendor/threejs/src/Three.js",
+              "src/assets/js/cuber/src/scripts/vendor/threejs/src/core/EventDispatcher.js",
+              "src/assets/js/cuber/src/scripts/vendor/threejs/src/math/Math.js",
+              "src/assets/js/cuber/src/scripts/vendor/threejs/src/math/Quaternion.js",
+              "src/assets/js/cuber/src/scripts/vendor/threejs/src/math/Vector2.js",
+              "src/assets/js/cuber/src/scripts/vendor/threejs/src/math/Vector3.js",
+              "src/assets/js/cuber/src/scripts/vendor/threejs/src/math/Box3.js",
+              "src/assets/js/cuber/src/scripts/vendor/threejs/src/math/Sphere.js",
+              "src/assets/js/cuber/src/scripts/vendor/threejs/src/math/Euler.js",
+              "src/assets/js/cuber/src/scripts/vendor/threejs/src/math/Matrix3.js",
+              "src/assets/js/cuber/src/scripts/vendor/threejs/src/math/Matrix4.js",
+              "src/assets/js/cuber/src/scripts/vendor/threejs/src/core/Object3D.js",
+              "src/assets/js/cuber/src/scripts/vendor/threejs/src/cameras/Camera.js",
+              "src/assets/js/cuber/src/scripts/vendor/threejs/src/cameras/PerspectiveCamera.js",
+              "src/assets/js/cuber/src/scripts/vendor/threejs/src/math/Ray.js",
+              "src/assets/js/cuber/src/scripts/vendor/threejs/src/math/Plane.js",
+              "src/assets/js/cuber/src/scripts/vendor/tween.min.js",
+              "src/assets/js/cuber/src/scripts/ERNO.js",
+              "src/assets/js/cuber/src/scripts/vendor/CSS3DRenderer.js",
+              "src/assets/js/cuber/src/scripts/utils/utils.js",
+              "src/assets/js/cuber/src/scripts/utils/Number.js",
+              "src/assets/js/cuber/src/scripts/utils/String.js",
+              "src/assets/js/cuber/src/scripts/utils/Array.js",
+              "src/assets/js/cuber/src/scripts/colors.js",
+              "src/assets/js/cuber/src/scripts/directions.js",
+              "src/assets/js/cuber/src/scripts/queues.js",
+              "src/assets/js/cuber/src/scripts/twists.js",
+              "src/assets/js/cuber/src/scripts/cubelets.js",
+              "src/assets/js/cuber/src/scripts/groups.js",
+              "src/assets/js/cuber/src/scripts/slices.js",
+              "src/assets/js/cuber/src/scripts/folds.js",
+              "src/assets/js/cuber/src/scripts/projector.js",
+              "src/assets/js/cuber/src/scripts/interaction.js",
+              "src/assets/js/cuber/src/scripts/controls.js",
+              "src/assets/js/cuber/src/scripts/cubes.js",
+              "src/assets/js/cuber/src/scripts/solvers.js",
+              "src/assets/js/cuber/src/scripts/renderer.js",
+              "src/assets/js/cuber/examples/basic/scripts/jquery.js",
+              "src/assets/js/cuber/src/scripts/extras/renderers/iecss3d.js",
+              "src/assets/js/cuber/src/scripts/extras/renderers/ierenderer.js",
+              "src/assets/js/cuber/src/scripts/extras/controls/locked.js",
+              "src/assets/js/cuber/src/scripts/extras/deviceMotion.js"
+              ]
           },
           "configurations": {
             "production": {
@@ -91,6 +138,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
             "scripts": []
