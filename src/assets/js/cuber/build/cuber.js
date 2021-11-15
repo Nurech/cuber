@@ -8314,11 +8314,11 @@ ERNO.Cubelet = function( cube, id, colors ){
 	// 	//  This face of our Cubelet needs a DOM element for all the
 	// 	//  related DOM elements to be attached to.
 
-	// 	var faceElement = document.createElement( 'div' );
-	// 	faceElement.classList.add( 'face' );
-	// 	faceElement.classList.add( 'face'+ ERNO.Direction.getNameById( i ).capitalize() );
-	// 	this.css3DObject.element.appendChild( faceElement );
-	// 	this.faces[i].element = faceElement;
+		var faceElement = document.createElement( 'div' );
+		faceElement.classList.add( 'face' );
+		faceElement.classList.add( 'face'+ ERNO.Direction.getNameById( i ).capitalize() );
+		this.css3DObject.element.appendChild( faceElement );
+		this.faces[i].element = faceElement;
 
 
 
@@ -8470,11 +8470,11 @@ ERNO.Cubelet = function( cube, id, colors ){
 
 	// this.show();
 	// this.showIntroverts();
-	// this.showPlastics();
-	// this.showStickers();
-	// this.hideIds();
-	// this.hideTexts();
-	// this.hideWireframes();
+	this.showPlastics();
+	this.showStickers();
+	this.hideIds();
+	this.hideTexts();
+	this.hideWireframes();
 
 
 	//  During a rotation animation this Cubelet marks itself as

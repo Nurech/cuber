@@ -9,6 +9,8 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
+    "allowJs": true,
+//    "checkJs": true /* Report errors in .js files. */,
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,

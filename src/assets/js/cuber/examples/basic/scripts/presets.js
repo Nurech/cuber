@@ -190,10 +190,10 @@ var presets = {
 	},
 	presetHighlight: function( included, excluded ){
 		// if( erno.state === 'setup' ) this.presetBling()
-		if( included === undefined ) included = new ERNO.Group( this.cubelets )
+		if( included === undefined ) included = new ERNO.Group( window.cube.cubelets )
 		if( excluded === undefined ){
 
-			excluded = new ERNO.Group( this.cubelets )
+			excluded = new ERNO.Group( window.cube.cubelets )
 			excluded.remove( included )
 		}
 		excluded.setOpacity( 0.1 )
@@ -202,27 +202,27 @@ var presets = {
 	},
 	presetHighlightCore: function(){
 
-		this.presetHighlight( this.core )
+		this.presetHighlight( window.cube.core )
 		//updateControls( this )
 	},
 	presetHighlightCenters: function(){
 
-		this.presetHighlight( this.centers )
+		this.presetHighlight( window.cube.centers )
 		//updateControls( this )
 	},
 	presetHighlightEdges: function(){
 
-		this.presetHighlight( this.edges )
+		this.presetHighlight( window.cube.edges )
 		//updateControls( this )
 	},
 	presetHighlightCorners: function(){
 
-		this.presetHighlight( this.corners )
+		this.presetHighlight( window.cube.corners )
 		//updateControls( this )
 	},
 	presetHighlightWhite: function(){
 
-		this.presetHighlight( this.hasColor( WHITE ))
+		this.presetHighlight( window.cube.hasColor( ERNO.W ))
 		//updateControls( this )
 	},
 	presetPurty: function(){
@@ -242,12 +242,12 @@ var presets = {
 		//updateControls( this )
 	},
 	presetDemo: function(){
-		var
-		cube  = this,
+		var cube  = window.cube,
+      that = this,
 		loops = 0,
 		captions = $( '#captions' )
 
-		this.taskQueue.add(
+		window.cube.taskQueue.add(
 
 
 			//  Rotation and twist demo.
@@ -257,7 +257,7 @@ var presets = {
 				cube.rotationDeltaX = -0.1
 				cube.rotationDeltaY = 0.15
 				cube.isRotating = true
-				cube.presetNormal()
+        let presetNormal = () => this.presetNormal();
 				cube.taskQueue.isReady = false
 				setTimeout( function(){ cube.taskQueue.isReady = true }, 1000 )
 			},
@@ -309,19 +309,19 @@ var presets = {
 
 			function(){
 
-				cube.down.setRadius( 90 )
+				cube.down.setRadius( 70 )
 				cube.taskQueue.isReady = false
 				setTimeout( function(){ cube.taskQueue.isReady = true }, 1000 )
 			},
 			function(){
 
-				cube.equator.setRadius( 90 )
+				cube.equator.setRadius( 70 )
 				cube.taskQueue.isReady = false
 				setTimeout( function(){ cube.taskQueue.isReady = true }, 1000 )
 			},
 			function(){
 
-				cube.up.setRadius( 90 )
+				cube.up.setRadius( 70 )
 				cube.taskQueue.isReady = false
 				setTimeout( function(){ cube.taskQueue.isReady = true }, 1000 )
 			},
@@ -347,9 +347,8 @@ var presets = {
 			},
 			function(){
 
-				var
-				excluded = new ERNO.Group( cube.cubelets ),
-				included = cube.hasColors( RED, YELLOW, BLUE )
+				var excluded = new ERNO.Group( cube.cubelets ),
+				included = cube.hasColors( window.R, window.Y, window.B )
 
 				excluded.remove( included )
 				excluded.setRadius()
@@ -360,7 +359,7 @@ var presets = {
 				cube.back.setRadius()
 				cube.showIds()
 				cube.taskQueue.isReady = false
-				setTimeout( function(){ cube.taskQueue.isReady = true }, (6).seconds() )
+				setTimeout( () => { cube.taskQueue.isReady = true }, 6000 )
 			},
 			function(){
 
@@ -369,13 +368,13 @@ var presets = {
 			function(){
 
 				cube.taskQueue.isReady = false
-				setTimeout( function(){ cube.taskQueue.isReady = true }, (6).seconds() )
+				setTimeout( () => { cube.taskQueue.isReady = true }, 6000 )
 			},
 			function(){
 
 				cube.setRadius()
 				cube.taskQueue.isReady = false
-				setTimeout( function(){ cube.taskQueue.isReady = true }, (3).seconds() )
+				setTimeout( () => { cube.taskQueue.isReady = true }, 3000 )
 			},
 
 
@@ -385,7 +384,7 @@ var presets = {
 			function(){
 
 				captions.text( 'Core' ).fadeIn()
-				cube.presetHighlightCore()
+        that.presetHighlightCore()
 				cube.taskQueue.isReady = false
 				setTimeout( function(){ cube.taskQueue.isReady = true }, 1000 )
 			},
@@ -393,7 +392,7 @@ var presets = {
 
 				cube.showIds()
 				cube.taskQueue.isReady = false
-				setTimeout( function(){ cube.taskQueue.isReady = true }, (2).seconds() )
+				setTimeout( () => { cube.taskQueue.isReady = true }, 2000 )
 			},
 			function(){
 
@@ -402,26 +401,26 @@ var presets = {
 			function(){
 
 				captions.text( 'Centers' )
-				cube.presetHighlightCenters()
+        that.presetHighlightCenters()
 				cube.twist( 'rdRD'.multiply( 4 ))
 			},
 			function(){
 
 				captions.text( 'Edges' )
-				cube.presetHighlightEdges()
+        that.presetHighlightEdges()
 				cube.twist( 'rdRD'.multiply( 3 ))
 			},
 			function(){
 
 				captions.text( 'Corners' )
-				cube.presetHighlightCorners()
+        that.presetHighlightCorners()
 				cube.twist( 'rdRD'.multiply( 3 ))
 			},
 			function(){
 
 				captions.fadeOut()
 				cube.taskQueue.isReady = false
-				setTimeout( function(){ cube.taskQueue.isReady = true }, (2).seconds() )
+				setTimeout( () => { cube.taskQueue.isReady = true }, 2000 )
 			},
 
 
@@ -431,7 +430,7 @@ var presets = {
 
 				cube.left.setOpacity( 0 )
 				cube.taskQueue.isReady = false
-				setTimeout( function(){ cube.taskQueue.isReady = true }, 1000 )
+				setTimeout( () => { cube.taskQueue.isReady = true }, 1000 )
 			},
 			function(){
 
@@ -442,13 +441,13 @@ var presets = {
 					.showIds()
 					.setOpacity( 1 )
 				cube.taskQueue.isReady = false
-				setTimeout( function(){ cube.taskQueue.isReady = true }, 1000 )
+				setTimeout( () => { cube.taskQueue.isReady = true }, 1000 )
 			},
 			function(){
 
 				cube.middle.setOpacity( 0 )
 				cube.taskQueue.isReady = false
-				setTimeout( function(){ cube.taskQueue.isReady = true }, 1000 )
+				setTimeout( () =>{ cube.taskQueue.isReady = true }, 1000 )
 			},
 			function(){
 
@@ -459,7 +458,7 @@ var presets = {
 					.showIds()
 					.setOpacity( 1 )
 				cube.taskQueue.isReady = false
-				setTimeout( function(){ cube.taskQueue.isReady = true }, 1000 )
+				setTimeout( () =>{ cube.taskQueue.isReady = true }, 1000 )
 			},
 			function(){
 
@@ -612,15 +611,15 @@ var presets = {
 				cube.twistQueue.history = []//  Lets just kill it outright.
 			}
 		)
-		this.taskQueue.isLooping = true
-		//updateControls( this )
+		window.cube.taskQueue.isLooping = true
+		//updateControls( window.cube )
 	},
 	presetDemoStop: function(){
 
-		this.taskQueue.isLooping = false
-		this.twistQueue.empty()
-		this.taskQueue.empty()
-		this.isRotating = false
+		window.cube.taskQueue.isLooping = false
+		window.cube.twistQueue.empty()
+		window.cube.taskQueue.empty()
+		window.cube.isRotating = false
 		//updateControls( this )
 	}
 }

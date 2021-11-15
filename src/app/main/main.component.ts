@@ -1,15 +1,17 @@
-import { Component, OnInit, SimpleChanges } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { CubeControlService } from '../services/cube-control.service';
+import { Cube } from '../services/cube-model';
 
+declare var presets: any;
 declare var ERNO: any;
-declare var TWEEN: any;
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, AfterContentInit {
+  private cube: Cube;
 
   constructor(private cubeControlService: CubeControlService) {
   }
@@ -19,21 +21,13 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const container = document.getElementById('container');
-    // @ts-ignore
-    container.appendChild(this.cube.domElement);
+  }
 
-
-    setTimeout(() => {
-      this.cubeControlService.cube.twistDuration = 150;
-      console.log(this.cube)
-    }, 1000);
-
-
+  ngAfterContentInit() {
   }
 
   onShuffle() {
-    this.cubeControlService.cube.shuffle();
+    this.cube.shuffle();
   }
 
   undo() {
@@ -57,10 +51,31 @@ export class MainComponent implements OnInit {
   }
 
   presetBling() {
-    this.cubeControlService.presetBling()
+    presets.presetBling();
+  }
+
+  presetHighlightCore() {
   }
 
   ready() {
-    this.cubeControlService.ready()
+    // @ts-ignore
+    this.cube = window.cube;
+    this.cube.twistDuration = 50;
+    console.log(window);
+    console.log(this.cube);
+  }
+
+
+  presetWireframe() {
+    presets.presetWireframe();
+  }
+
+  presetTextAnimate() {
+    presets.presetTextAnimate();
+  }
+
+  demo() {
+    presets.presetDemo();
   }
 }
+
