@@ -1,17 +1,15 @@
-import { AfterContentInit, AfterViewInit, Component, ElementRef, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, SimpleChanges } from '@angular/core';
 import { CubeControlService } from '../services/cube-control.service';
-import { Cube } from '../services/cube-model';
 
 declare var presets: any;
-declare var ERNO: any;
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit, AfterContentInit {
-  private cube: Cube;
+export class MainComponent implements OnInit, AfterViewInit {
+  private cube: any;
 
   constructor(private cubeControlService: CubeControlService) {
   }
@@ -21,9 +19,14 @@ export class MainComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit(): void {
+
   }
 
-  ngAfterContentInit() {
+  ngAfterViewInit() {
+    setTimeout(() => {
+      // @ts-ignore
+      this.cube = window.cube;
+    })
   }
 
   onShuffle() {
@@ -55,11 +58,11 @@ export class MainComponent implements OnInit, AfterContentInit {
   }
 
   presetHighlightCore() {
+    presets.presetHighlightCore()
   }
 
   ready() {
     // @ts-ignore
-    this.cube = window.cube;
     this.cube.twistDuration = 50;
     console.log(window);
     console.log(this.cube);
@@ -76,6 +79,34 @@ export class MainComponent implements OnInit, AfterContentInit {
 
   demo() {
     presets.presetDemo();
+  }
+
+  presetHighlightWhite() {
+    presets.presetHighlightWhite()
+  }
+
+  presetDemoStop() {
+    presets.presetDemoStop()
+  }
+
+  presetPurty() {
+    presets.presetPurty()
+  }
+
+  presetNormal() {
+    presets.presetNormal()
+  }
+
+  presetHighlightCenters() {
+    presets.presetHighlightCenters()
+  }
+
+  presetHighlightEdges() {
+    presets.presetHighlightEdges()
+  }
+
+  presetHighlightCorners() {
+    presets.presetHighlightCorners()
   }
 }
 

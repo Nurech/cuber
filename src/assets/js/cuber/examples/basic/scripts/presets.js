@@ -2,100 +2,104 @@
 var presets = {
 	presetBling: function(){
 
-			var cube = this;
+    var cube = window.cube;
 
-			this.position.y = -2000;
-			new TWEEN.Tween( this.position )
-				.to({
-					y: 0
-				}, 1000 * 2 )
-				.easing( TWEEN.Easing.Quartic.Out )
-				.start();
-			this.rotation.set(
+    cube.position.y = -2000;
+    new TWEEN.Tween( cube.position )
+      .to({
+        y: 0
+      }, 1000 * 2 )
+      .easing( TWEEN.Easing.Quartic.Out )
+      .start();
+    cube.rotation.set(
 
-				( 180 ).degreesToRadians(),
-				( 180 ).degreesToRadians(),
-				(  20 ).degreesToRadians()
-			);
-			new TWEEN.Tween( this.rotation )
-				.to({
+      ( 180 ).degreesToRadians(),
+      ( 180 ).degreesToRadians(),
+      (  20 ).degreesToRadians()
+    );
+    new TWEEN.Tween( cube.rotation )
+      .to({
 
-					x: (  25 ).degreesToRadians(),
-					y: ( -30 ).degreesToRadians(),
-					z: 0
+        x: (  25 ).degreesToRadians(),
+        y: ( -30 ).degreesToRadians(),
+        z: 0
 
-				}, 1000 * 3 )
-				.easing( TWEEN.Easing.Quartic.Out )
-				.onComplete( function(){
+      }, 1000 * 3 )
+      .easing( TWEEN.Easing.Quartic.Out )
+      .onComplete( function(){
 
-					cube.isReady = true;
+        cube.isReady = true;
 
-				})
-				.start();
-			this.isReady = false;
-
-
-			//  And we want each Cubelet to begin in an exploded position and tween inward.
-
-			this.cubelets.forEach( function( cubelet ){
+      })
+      .start();
+    cube.isReady = false;
 
 
-				//  We want to start with each Cubelet exploded out away from the Cube center.
-				//  We're reusing the x, y, and z we created far up above to handle Cubelet positions.
+    //  And we want each Cubelet to begin in an exploded position and tween inward.
 
-				var distance = 1000;
-				cubelet.position.set(
-
-					cubelet.addressX * distance,
-					cubelet.addressY * distance,
-					cubelet.addressZ * distance
-				);
+    cube.cubelets.forEach( function( cubelet ){
 
 
-				//  Let's vary the arrival time of flying Cubelets based on their type.
-				//  An nice extra little but of sauce!
+      //  We want to start with each Cubelet exploded out away from the Cube center.
+      //  We're reusing the x, y, and z we created far up above to handle Cubelet positions.
 
-				var delay;
-				if( cubelet.type === 'core'   ) delay = (   0 ).random(  200 );
-				if( cubelet.type === 'center' ) delay = ( 200 ).random(  400 );
-				if( cubelet.type === 'edge'   ) delay = ( 400 ).random(  800 );
-				if( cubelet.type === 'corner' ) delay = ( 800 ).random( 1000 );
+      var distance = 2000;
+      let startX = cubelet.position.x
+      let startY = cubelet.position.y
+      let startZ = cubelet.position.z
+      cubelet.position.set(
+
+        cubelet.addressX * distance,
+        cubelet.addressY * distance,
+        cubelet.addressZ * distance
+      );
+      console.log( cubelet.addressX, cubelet.addressY, cubelet.addressZ)
+
+      //  Let's vary the arrival time of flying Cubelets based on their type.
+      //  An nice extra little but of sauce!
+
+      var delay;
+      if( cubelet.type === 'core'   ) delay = (   0 ).random(  200 );
+      if( cubelet.type === 'center' ) delay = ( 200 ).random(  400 );
+      if( cubelet.type === 'edge'   ) delay = ( 400 ).random(  800 );
+      if( cubelet.type === 'corner' ) delay = ( 800 ).random( 1000 );
 
 
-				new TWEEN.Tween( cubelet.position )
-					.to({
+      new TWEEN.Tween( cubelet.position )
+        .to({
 
-						x: 0,
-						y: 0,
-						z: 0
+          x: startX,
+          y: startY,
+          z: startZ
 
-					}, 1000 )
-					.delay( delay )
-					.easing( TWEEN.Easing.Quartic.Out )
-					.onComplete( function(){
+        }, 2000 )
+        .delay( delay )
+        .easing( TWEEN.Easing.Quartic.Out )
+        .onComplete( function(){
 
-						cubelet.isTweening = false;
-					})
-					.start();
+          cubelet.isTweening = false;
+        })
+        .start();
 
-				cubelet.isTweening = true;
-			});
+      cubelet.isTweening = true;
+    });
 
 		},
 	presetNormal: function(){
 		console.log( 'test' )
 		$( 'body' ).css( 'background-color', '#000' );
 		$( 'body' ).addClass( 'graydient' );
-		setTimeout( function(){ $( '.cubelet' ).removeClass( 'purty' )}, 1 );;
-		this.show();
-		this.showIntroverts();
-		this.showPlastics();
-		this.showStickers();
-		this.hideTexts();
-		this.hideWireframes();
-		this.hideIds();
-		this.setOpacity();
-		this.setRadius();
+    $( '.cube .face' ).css('padding', "0.05em")
+    setTimeout( function(){ $( '.cubelet' ).removeClass( 'purty' )}, 1 );;
+		window.cube.show();
+    window.cube.showIntroverts();
+		window.cube.showPlastics();
+		window.cube.showStickers();
+		window.cube.hideTexts();
+		window.cube.hideWireframes();
+		window.cube.hideIds();
+		window.cube.setOpacity();
+		window.cube.setRadius();
 		//updateControls( this );
 	},
 
@@ -171,15 +175,18 @@ var presets = {
 		//updateControls( this )
 	},
 	presetWireframe: function( included, excluded ){
-		setTimeout( function(){ $( '.cubelet' ).removeClass( 'purty' )}, 1 )
-		this.showIntroverts()
-		if( included === undefined ) included = new ERNO.Group( this.cubelets )
+		setTimeout( function(){
+      $( '.cubelet' ).removeClass( 'purty' )
+      $( '.cube .face' ).css('padding', "0")
+    }, 1 )
+		window.cube.showIntroverts()
+		if( included === undefined ) included = new ERNO.Group( window.cube.cubelets )
 		if( excluded === undefined ){
 
-			excluded = new ERNO.Group( this.cubelets )
+			excluded = new ERNO.Group( window.cube.cubelets )
 			excluded.remove( included )
 		}
-		this.show()
+    window.cube.show()
 		excluded.showPlastics()
 		excluded.showStickers()
 		excluded.hideWireframes()
@@ -188,18 +195,17 @@ var presets = {
 		included.showWireframes()
 		//updateControls( this )
 	},
-	presetHighlight: function( included, excluded ){
-		// if( erno.state === 'setup' ) this.presetBling()
-		if( included === undefined ) included = new ERNO.Group( window.cube.cubelets )
-		if( excluded === undefined ){
-
-			excluded = new ERNO.Group( window.cube.cubelets )
-			excluded.remove( included )
-		}
-		excluded.setOpacity( 0.1 )
-		included.setOpacity()
-		//updateControls( this )
-	},
+  presetHighlight: function (included, excluded) {
+    // if( erno.state === 'setup' ) this.presetBling()
+    if (included === undefined) included = new ERNO.Group(window.cube.cubelets)
+    if (excluded === undefined) {
+      excluded = new ERNO.Group(window.cube.cubelets)
+      excluded.remove(included)
+    }
+    excluded.setOpacity(0)
+    included.setOpacity()
+    //updateControls( this )
+  },
 	presetHighlightCore: function(){
 
 		this.presetHighlight( window.cube.core )
@@ -222,18 +228,18 @@ var presets = {
 	},
 	presetHighlightWhite: function(){
 
-		this.presetHighlight( window.cube.hasColor( ERNO.W ))
+		this.presetHighlight( window.cube.hasColor( WHITE ))
 		//updateControls( this )
 	},
 	presetPurty: function(){
 
-		this.showIntroverts()
+		window.cube.showIntroverts()
 		setTimeout( function(){
 
 			$( '.cubelet' ).addClass( 'purty' )
 
 		}, 1 )
-		this.rotation.set(
+    window.cube.rotation.set(
 
 			( 35.3).degreesToRadians(),
 			(-45  ).degreesToRadians(),

@@ -155,7 +155,7 @@ ERNO.extend( ERNO.Group.prototype, {
 		var results = new ERNO.Group(),
 		colors  = Array.prototype.slice.call( arguments );
 
-		window.cube.cubelets.forEach( ( cubelet ) => {
+		this.cubelets.forEach( ( cubelet ) => {
 
 			if( cubelet.hasColors.apply( cubelet, colors )) results.add( cubelet );
 		});
