@@ -7420,7 +7420,7 @@ var W,
 	R,
 	G,
 	Y,
-	COLOURLESS;
+  COLORLESS;
 
 W = ERNO.WHITE = new ERNO.Color(
 
@@ -7470,7 +7470,7 @@ Y = ERNO.YELLOW = new ERNO.Color(
 	'font-weight: bold; color: #ED0',
 	'background-color: #FE0; color: rgba( 0, 0, 0, 0.5 )'
 ),
-ERNO.COLORLESS = new ERNO.Color(
+  COLORLESS = ERNO.COLORLESS = new ERNO.Color(
 
 	'NA',
 	'X',
@@ -8256,14 +8256,14 @@ ERNO.Cubelet = function( cube, id, colors ){
 
 
 
-	// var domElement = document.createElement( 'div' );
-	// domElement.classList.add( 'cubelet' );
-	// domElement.classList.add( 'cubeletId-'+ this.id );
-	// this.css3DObject = new THREE.CSS3DObject( domElement );
+	var domElement = document.createElement( 'div' );
+	domElement.classList.add( 'cubelet' );
+	domElement.classList.add( 'cubeletId-'+ this.id );
+	this.css3DObject = new THREE.CSS3DObject( domElement );
 
 
-	// this.css3DObject.name = 'css3DObject-' + this.id;
-	// this.add( this.css3DObject );
+	this.css3DObject.name = 'css3DObject-' + this.id;
+	this.add( this.css3DObject );
 
 
 

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { CubeControlService } from '../services/cube-control.service';
 
 declare var presets: any;
@@ -8,7 +8,7 @@ declare var presets: any;
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit, AfterViewInit {
+export class MainComponent implements OnInit {
   private cube: any;
 
   constructor(private cubeControlService: CubeControlService) {
@@ -19,14 +19,7 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-
-  }
-
-  ngAfterViewInit() {
-    setTimeout(() => {
-      // @ts-ignore
-      this.cube = window.cube;
-    })
+    this.cubeControlService.currentCube.subscribe(cube => this.cube = cube)
   }
 
   onShuffle() {
@@ -54,7 +47,7 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   presetBling() {
-    presets.presetBling();
+    this.cubeControlService.presetBling();
   }
 
   presetHighlightCore() {
@@ -62,10 +55,8 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   ready() {
-    // @ts-ignore
-    this.cube.twistDuration = 50;
-    console.log(window);
-    console.log(this.cube);
+    this.cubeControlService.createNewCube()
+    this.cube = window.cube;
   }
 
 
@@ -107,6 +98,50 @@ export class MainComponent implements OnInit, AfterViewInit {
 
   presetHighlightCorners() {
     presets.presetHighlightCorners()
+  }
+
+  presetLogo() {
+    presets.presetLogo()
+  }
+
+
+  presetIds() {
+    presets.presetIds()
+  }
+
+  showGray() {
+    presets.showGray()
+  }
+
+  paintDifferent() {
+    this.cubeControlService.paintFace(11,1,4)
+    this.cubeControlService.paintFace(11,2,4)
+
+  }
+
+  whiteOnTop() {
+    this.cubeControlService.cube
+    this.cubeControlService.paintFace(0,1,4)
+    this.cubeControlService.paintFace(0,2,4)
+    this.cube.twist( 'Y')
+    this.cube.twist( 'D')
+  }
+
+  turnRegular() {
+    this.cubeControlService.turnRegular()
+  }
+
+  turnGray() {
+    this.cubeControlService.turnGray()
+  }
+
+  tweenToStart() {
+    this.cubeControlService.tweenToStart()
+  }
+
+
+  solve() {
+    this.cubeControlService.solve()
   }
 }
 

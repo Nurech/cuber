@@ -43,7 +43,8 @@ var W,
 	R,
 	G,
 	Y,
-	COLOURLESS;
+  GRAY,
+  COLORLESS;
 
 W = ERNO.WHITE = new ERNO.Color(
 
@@ -52,7 +53,7 @@ W = ERNO.WHITE = new ERNO.Color(
 	'#FFF',
 	'font-weight: bold; color: #888',
 	'background-color: #F3F3F3; color: rgba( 0, 0, 0, 0.5 )'
-),
+);
 O = ERNO.ORANGE = new ERNO.Color(
 
 	'orange',
@@ -60,7 +61,7 @@ O = ERNO.ORANGE = new ERNO.Color(
 	'#F60',
 	'font-weight: bold; color: #F60',
 	'background-color: #F60; color: rgba( 255, 255, 255, 0.9 )'
-),
+);
 B = ERNO.BLUE = new ERNO.Color(
 
 	'blue',
@@ -68,7 +69,7 @@ B = ERNO.BLUE = new ERNO.Color(
 	'#00D',
 	'font-weight: bold; color: #00D',
 	'background-color: #00D; color: rgba( 255, 255, 255, 0.9 )'
-),
+);
 R = ERNO.RED = new ERNO.Color(
 
 	'red',
@@ -76,7 +77,7 @@ R = ERNO.RED = new ERNO.Color(
 	'#F00',
 	'font-weight: bold; color: #F00',
 	'background-color: #F00; color: rgba( 255, 255, 255, 0.9 )'
-),
+);
 G = ERNO.GREEN = new ERNO.Color(
 
 	'green',
@@ -84,7 +85,7 @@ G = ERNO.GREEN = new ERNO.Color(
 	'#0A0',
 	'font-weight: bold; color: #0A0',
 	'background-color: #0A0; color: rgba( 255, 255, 255, 0.9 )'
-),
+);
 Y = ERNO.YELLOW = new ERNO.Color(
 
 	'yellow',
@@ -92,12 +93,20 @@ Y = ERNO.YELLOW = new ERNO.Color(
 	'#FE0',
 	'font-weight: bold; color: #ED0',
 	'background-color: #FE0; color: rgba( 0, 0, 0, 0.5 )'
-),
-ERNO.COLORLESS = new ERNO.Color(
+);
+COLORLESS = ERNO.COLORLESS = new ERNO.Color(
 
 	'NA',
 	'X',
 	'#DDD',
 	'color: #EEE',
 	'color: #DDD'
-)
+);
+GRAY = ERNO.GRAY = new ERNO.Color(
+
+  'gray',
+  'H',
+  '#949494',
+  'font-weight: bold; color: #949494',
+  'background-color: #949494; color: rgba( 0, 0, 0, 0.5 )'
+);

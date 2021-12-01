@@ -86,6 +86,7 @@ THREE.EventDispatcher.prototype = {
 			var listenerArray = listeners[ event.type ];
 
 			if ( listenerArray !== undefined ) {
+        console.log(listenerArray)
 
 				event.target = this;
 
@@ -99,6 +100,7 @@ THREE.EventDispatcher.prototype = {
 
 				for ( var i = 0; i < length; i ++ ) {
 
+          console.log(array)
 					array[ i ].call( this, event );
 
 				}

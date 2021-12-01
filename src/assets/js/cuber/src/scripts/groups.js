@@ -40,7 +40,6 @@ ERNO.extend( ERNO.Group.prototype, {
 		var
 		cubeletsToAdd = Array.prototype.slice.call( arguments ),
 		that = this;
-
 		cubeletsToAdd.forEach( function( cubelet ){
 
 			if( cubelet instanceof ERNO.Group ) cubelet = cubelet.cubelets;
@@ -220,6 +219,12 @@ ERNO.extend( ERNO.Group.prototype, {
 		this.cubelets.forEach( function( cubelet ){ cubelet.hidePlastics() })
 		return this
 	},
+
+  changeFaceColor: function(){
+    this.cubelets.forEach( function( cubelet ){ cubelet.changeFaceColor() })
+    return this
+  },
+
 	showExtroverts: function(){
 
 		this.cubelets.forEach( function( cubelet ){ cubelet.showExtroverts() })

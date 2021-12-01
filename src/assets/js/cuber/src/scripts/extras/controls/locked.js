@@ -1,6 +1,5 @@
 ERNO.Locked = function ( cube, camera, domElement ) {
 
-
 	cube.domElement.ondragstart = function(){ return false };
 
 
@@ -378,8 +377,7 @@ ERNO.Locked = function ( cube, camera, domElement ) {
 			if( group === cube.slicesDictionary[ 'z' ]  ) angle *= -1;
 			angle *= sign;
 			// group.rotation = Math.min( Math.PI * 0.5, Math.max( Math.PI * -0.5, angle * api.rotationSpeed ));
-			group.rotation = angle * api.rotationSpeed;
-
+      group.rotation = angle * api.rotationSpeed;
 		}
 
 

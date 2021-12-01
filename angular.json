@@ -75,6 +75,7 @@
               "src/assets/js/cuber/src/scripts/extras/controls/locked.js",
               "src/assets/js/cuber/src/scripts/extras/deviceMotion.js",
               "src/assets/js/cuber/examples/basic/scripts/presets.js",
+              "src/assets/js/cuber/src/scripts/extras/inspect.js"
             ]
           },
           "configurations": {

@@ -53,7 +53,6 @@ var presets = {
         cubelet.addressY * distance,
         cubelet.addressZ * distance
       );
-      console.log( cubelet.addressX, cubelet.addressY, cubelet.addressZ)
 
       //  Let's vary the arrival time of flying Cubelets based on their type.
       //  An nice extra little but of sauce!
@@ -90,7 +89,7 @@ var presets = {
 		$( 'body' ).css( 'background-color', '#000' );
 		$( 'body' ).addClass( 'graydient' );
     $( '.cube .face' ).css('padding', "0.05em")
-    setTimeout( function(){ $( '.cubelet' ).removeClass( 'purty' )}, 1 );;
+    setTimeout( () => { $( '.cubelet' ).removeClass( 'purty' )} );
 		window.cube.show();
     window.cube.showIntroverts();
 		window.cube.showPlastics();
@@ -105,31 +104,40 @@ var presets = {
 
 
 	presetText: function( virgin ){
-		$( 'body' ).css( 'background-color', '#F00' );
-		$( 'body' ).removeClass( 'graydient' );
-		setTimeout( function(){ $( '.cubelet' ).removeClass( 'purty' )}, 1 );;
+		// $( 'body' ).css( 'background-color', '#F00' );
+		// $( 'body' ).removeClass( 'graydient' );
+		setTimeout( () => { $( '.cubelet' ).removeClass( 'purty' )}, );;
 
-		var cube = this;
+		var cube = window.cube;
+    $( '.cube .face' ).css('padding', "0")
 
-		// setTimeout( function(){
 
 			cube.show();
 			cube.hidePlastics();
 			cube.hideStickers();
 			cube.hideIds();
-			cube.hideIntroverts();
+			cube.showIntroverts();
 			cube.showTexts();
-			cube.hideWireframes();
+      cube.showWireframes()
 			cube.setOpacity();
-			//updateControls( cube );
-
-		// }, 1 );
 	},
-	presetLogo: function(){
-		var cube = this;
 
-		this.isReady = false
-		this.presetText()
+  presetIds: function() {
+    var cube = window.cube;
+    $( '.cube .face' ).css('padding', "0")
+
+    cube.show();
+    cube.hidePlastics();
+    cube.hideStickers();
+    cube.showWireframes()
+    cube.showIds();
+  },
+
+	presetLogo: function(){
+		var cube = window.cube;
+
+    window.cube.isReady = false
+    this.presetText()
 		new TWEEN.Tween( cube.rotation )
 		.to({
 			x: 0,
@@ -141,7 +149,7 @@ var presets = {
 
 			//updateControls( cube )
 			cube.isReady = true
-			cube.twist( 'E20d17' )
+			// cube.twist( 'E20d17' )
 		})
 		.start()
 	},
@@ -174,6 +182,7 @@ var presets = {
 		}, delay + 1000 * 2 + twistDurationScaled + 50 )
 		//updateControls( this )
 	},
+
 	presetWireframe: function( included, excluded ){
 		setTimeout( function(){
       $( '.cubelet' ).removeClass( 'purty' )
@@ -190,11 +199,30 @@ var presets = {
 		excluded.showPlastics()
 		excluded.showStickers()
 		excluded.hideWireframes()
+		excluded.hideTexts()
+    included.hideTexts()
 		included.hidePlastics()
 		included.hideStickers()
 		included.showWireframes()
 		//updateControls( this )
 	},
+
+  showGray: function( included, excluded ){
+    if( included === undefined ) included = new ERNO.Group( window.cube.corners )
+    if( excluded === undefined ){
+
+      excluded = new ERNO.Group( window.cube.cubelets )
+      excluded.remove( included )
+    }
+    window.cube.show()
+    excluded.hide()
+    excluded.setOpacity(0)
+    included.setOpacity()
+    console.log(excluded, included)
+  },
+
+
+
   presetHighlight: function (included, excluded) {
     // if( erno.state === 'setup' ) this.presetBling()
     if (included === undefined) included = new ERNO.Group(window.cube.cubelets)
@@ -206,6 +234,7 @@ var presets = {
     included.setOpacity()
     //updateControls( this )
   },
+
 	presetHighlightCore: function(){
 
 		this.presetHighlight( window.cube.core )
@@ -228,9 +257,10 @@ var presets = {
 	},
 	presetHighlightWhite: function(){
 
-		this.presetHighlight( window.cube.hasColor( WHITE ))
+		this.presetHighlight( window.cube.hasColor(window.ERNO.WHITE))
 		//updateControls( this )
 	},
+
 	presetPurty: function(){
 
 		window.cube.showIntroverts()
@@ -239,14 +269,9 @@ var presets = {
 			$( '.cubelet' ).addClass( 'purty' )
 
 		}, 1 )
-    window.cube.rotation.set(
-
-			( 35.3).degreesToRadians(),
-			(-45  ).degreesToRadians(),
-			   0
-		)
 		//updateControls( this )
 	},
+
 	presetDemo: function(){
 		var cube  = window.cube,
       that = this,
@@ -439,7 +464,7 @@ var presets = {
 				setTimeout( () => { cube.taskQueue.isReady = true }, 1000 )
 			},
 			function(){
-
+        $( '.cube .face' ).css('padding', "0")
 				cube.left
 					.hidePlastics()
 					.hideStickers()
@@ -456,7 +481,7 @@ var presets = {
 				setTimeout( () =>{ cube.taskQueue.isReady = true }, 1000 )
 			},
 			function(){
-
+        $( '.cube .face' ).css('padding', "0")
 				cube.middle
 					.hidePlastics()
 					.hideStickers()
@@ -473,7 +498,7 @@ var presets = {
 				setTimeout( function(){ cube.taskQueue.isReady = true }, 1000 )
 			},
 			function(){
-
+        $( '.cube .face' ).css('padding', "0")
 				cube.right
 					.hidePlastics()
 					.hideStickers()
@@ -492,7 +517,7 @@ var presets = {
 			//  Text demo.
 
 			function(){
-
+        $( '.cube .face' ).css('padding', "0")
 				cube.left.setOpacity( 0 )
 				cube.taskQueue.isReady = false
 				setTimeout( function(){ cube.taskQueue.isReady = true }, 1000 )
@@ -559,7 +584,7 @@ var presets = {
 			//  Return to Normal mode
 
 			function(){
-
+        $( '.cube .face' ).css('padding', "0.05em")
 				cube.left.setOpacity( 0 )
 				cube.taskQueue.isReady = false
 				setTimeout( function(){ cube.taskQueue.isReady = true }, 1000 )
