@@ -1,7 +1,7 @@
 /**
- * Some basic convenience accessors, didn't bother to convert everything, just the basics
+ * Some basic convenience accessors, didn't convert everything, just the basics
  */
-export interface Cube {
+export interface Cuber {
   paused: boolean;
   autoRotate: boolean;
   keyboardControlsEnabled: boolean;
@@ -24,6 +24,22 @@ export interface Cube {
   undo: Function;
   shuffle: Function;
   cubelets: Cubelet[];
+  twistQueue: Queue;
+  rotation: any;
+  domElement: any;
+  camera: any;
+  object3D: any;
+  position: Position;
+  isSolved: Function;
+}
+
+interface Queue {
+  future: [];
+  history: [];
+  isLooping: boolean;
+  isReady: boolean;
+  useHistory: boolean;
+  validate: Function;
 }
 
 
@@ -37,6 +53,21 @@ export interface Cubelet {
   addressY: number;
   addressZ: number;
   type: string;
+  id: number;
+  left: Side;
+  right: Side;
+  up: Side;
+  down: Side;
+  front: Side;
+  back: Side;
+}
+
+export interface Side {
+  color: Color;
+  element: HTMLElement;
+  id: number;
+  isIntrovert: boolean;
+  normal: string;
 }
 
 export interface Position {

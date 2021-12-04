@@ -114,18 +114,23 @@ export class MainComponent implements OnInit {
   }
 
   paintDifferent() {
-    this.cubeControlService.paintFace(11,1,4)
-    this.cubeControlService.paintFace(11,2,4)
+    this.cubeControlService.paintFace(0,0,3)
+    this.cubeControlService.paintFace(1,0,3)
+    this.cubeControlService.paintFace(2,0,3)
 
+    this.cubeControlService.paintFace(18,4,6)
+    this.cubeControlService.paintFace(9,4,6)
+    this.cubeControlService.paintFace(0,4,6)
+
+    this.cubeControlService.paintFace(20,5,1)
+    this.cubeControlService.paintFace(19,5,1)
+    this.cubeControlService.paintFace(18,5,1)
+
+    this.cubeControlService.paintFace(2,2,2)
+    this.cubeControlService.paintFace(11,2,2)
+    this.cubeControlService.paintFace(20,2,2)
   }
 
-  whiteOnTop() {
-    this.cubeControlService.cube
-    this.cubeControlService.paintFace(0,1,4)
-    this.cubeControlService.paintFace(0,2,4)
-    this.cube.twist( 'Y')
-    this.cube.twist( 'D')
-  }
 
   turnRegular() {
     this.cubeControlService.turnRegular()
@@ -139,9 +144,12 @@ export class MainComponent implements OnInit {
     this.cubeControlService.tweenToStart()
   }
 
+  logCube() {
+    this.cubeControlService.logCube()
+  }
 
-  solve() {
-    this.cubeControlService.solve()
+  getCubeCurrentState() {
+    this.cubeControlService.getCubeCurrentState()
   }
 }
 
