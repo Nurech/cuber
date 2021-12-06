@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
-import { Cubelet, Cuber, Direction } from '../shared/models/cube-model';
+import { BehaviorSubject, ReplaySubject } from 'rxjs';
+import { Cubelet, Direction } from '../shared/models/cube-model';
 import { NgDebounce } from '../shared/decorators/debounce.decorator';
 const cloneDeep = require('clone-deep');
 const Cube = require('cubejs');
-
+declare var TWEEN: any;
 
 declare global {
   interface Window {
@@ -29,9 +29,8 @@ declare global {
 export class CubeControlService {
   cube: any;
   cube_copy: any;
-  private currentState: string = '';
   private hideInvisibleFaces = false;
-  private useLockedControls = true;
+  private useLockedControls = false;
   currentCube = new ReplaySubject<any>(1);
   COLORLESS = window.COLORLESS;
   //                  0            1           2           3            4            5
@@ -43,16 +42,16 @@ export class CubeControlService {
 
     //  Front slice
 
-    [6, 5, , , 1], [6, 5, , , ], [6, 5, 3, , ],//   0,  1,  2
-    [6, , , , 1], [6, , , , ], [6, , 3, , ],//   3,  4,  5
-    [6, , , 4, 1], [6, , , 4, ], [6, , 3, 4, ],//   6,  7,  8
+    [6, 5, , ], [6, 5, , ], [6, 5, 3, ],//   0,  1,  2
+    [6, , , , 1], [6, , , ], [6, , 3, ],//   3,  4,  5
+    [6, , , 4, 1], [6, , , 4], [6, , 3, 4],//   6,  7,  8
 
 
     //  Standing slice
 
-    [, 5, , , 1], [, 5, , , ], [, 5, 3, , ],//   9, 10, 11
-    [, , , , 1], [, , , , ], [, , 3, , ],//  12, XX, 14
-    [, , , 4, 1], [, , , 4, ], [, , 3, 4, ],//  15, 16, 17
+    [, 5, , , 1], [, 5, , ], [, 5, 3, ],//   9, 10, 11
+    [, , , , 1], [, , , ], [, , 3, ],//  12, XX, 14
+    [, , , 4, 1], [, , , 4], [, , 3, 4],//  15, 16, 17
 
 
     //  Back slice
@@ -106,6 +105,11 @@ export class CubeControlService {
     'red': 'D'
   };
 
+  // Subs
+  isSolved = new BehaviorSubject<boolean>(true);
+  isHidden = new BehaviorSubject<boolean>(true);
+  userOnTab = new BehaviorSubject<number>(0);
+
   constructor() {
     // This takes 4-5 seconds on a modern computer
     Cube.initSolver();
@@ -116,9 +120,9 @@ export class CubeControlService {
    * Supply cubeletId, faceId, colorID
    */
   paintFace(cubeletId: number, faceId: number, colorId: number) {
-
+    setTimeout(() => {
     const cubelet: Cubelet = this.cube.cubelets[cubeletId];
-    // this.quickExplodeImplode(cubelet)
+    this.quickExplodeImplode(cubelet)
     const direction: Direction = window.ERNO.Direction.getDirectionById(cubelet.faces[faceId].id);
     console.log(cubelet);
 
@@ -142,6 +146,7 @@ export class CubeControlService {
     const currentFaceId = direction.id;
 
     // Change the css
+
     cubelet.changeFaceColor(this.FACES_CSS[currentFaceId], colorId);
 
     // But also update cubelet colors
@@ -152,6 +157,7 @@ export class CubeControlService {
     cubelet.faces[currentFaceId].color = this.COLORS[colorId];
     console.log(cubelet.faces[currentFaceId]);
     console.log(cubelet);
+    }, Math.floor(Math.random()*1000))
   }
 
   quickExplodeImplode(cubelet: Cubelet) {
@@ -164,7 +170,7 @@ export class CubeControlService {
     let startZ = cubelet.position.z;
 
     // Explode
-    new window.TWEEN.Tween(cubelet.position)
+    new TWEEN.Tween(cubelet.position)
       .to({
 
         x: cubelet.addressX * distance,
@@ -172,10 +178,10 @@ export class CubeControlService {
         z: cubelet.addressZ * distance
 
       }, 100)
-      .easing(window.TWEEN.Easing.Quartic.Out)
+      .easing(TWEEN.Easing.Quartic.Out)
       .onComplete(function () {
         // Implode
-        new window.TWEEN.Tween(cubelet.position)
+        new TWEEN.Tween(cubelet.position)
           .to({
 
             x: startX,
@@ -183,7 +189,7 @@ export class CubeControlService {
             z: startZ
 
           }, 100)
-          .easing(window.TWEEN.Easing.Quartic.Out)
+          .easing(TWEEN.Easing.Quartic.Out)
           .onComplete(function () {
 
             cubelet.isTweening = false;
@@ -198,49 +204,40 @@ export class CubeControlService {
 
 
   turnRegular() {
-    // this.cube.twistDuration = 1;
-    // while (this.cube.twistQueue.history.length) {
-    //   this.cube.undo();
-    // }
-    // this.paintRegular();
-    const container = document.getElementById('container')
-    if (container) {
-      while (container.firstChild) {
-        container.firstChild.remove()
-      }
-      console.log(this.cube_copy)
-      this.cube = this.cube_copy;
-      window.cube = this.cube;
-      container.appendChild(this.cube.domElement)
+    this.cube.twistDuration = 50;
+    setTimeout(() => {
+      this.paintRegular();
+    }, this.cube.twistDuration * (this.cube.twistQueue.history.length+1))
+    while (this.cube.twistQueue.history.length) {
+      this.cube.undo();
     }
   }
 
-  @NgDebounce(500)
+  @NgDebounce(100)
   paintRegular() {
-    this.defaultMap.forEach((faces, i) => {
-      faces.forEach((color, j) => {
-        if (color === undefined) return;
-        this.paintFace(i, j, color);
-      });
-    });
-    this.cube.twistDuration = 500;
+    for (let k = 0; k < this.cube.cubelets.length; k++) {
+      for (let i =0; i < this.defaultMap.length; i++) {
+        for (let j = 0; j < this.defaultMap[i].length; j++){
+          if (this.defaultMap[i][j]) {
+            // @ts-ignore
+            this.paintFace(k, j, this.defaultMap[i][j]);
+          }
+        }
+      }
+    }
   }
 
   twistComplete(): boolean {
-    // console.log('a twist happened')
     console.log(this.cube.isSolved());
-    // if (this.cube.isSolved()) {
-    //   window.alert('solved!');
-    // }
+    this.isSolved.next(this.cube.isSolved())
     return true;
   }
-
 
   turnGray() {
     this.defaultMap.forEach((faces, i) => {
       faces.forEach((color, j) => {
         if (color === undefined) return;
-        setTimeout(() => {this.paintFace(i, j, 0);}, Math.random() * 700);
+        this.paintFace(i, j, 0);
       });
     });
   }
@@ -293,6 +290,7 @@ export class CubeControlService {
     }
     this.addEventListeners();
     this.cube.twistDuration = 100;
+    this.presetBling()
     console.log(window);
     console.log(this.cube);
   }
@@ -301,6 +299,7 @@ export class CubeControlService {
   // Awesome
   presetBling() {
     this.cube.position.y = -2000;
+    this.isHidden.next(false)
     new window.TWEEN.Tween(this.cube.position)
       .to({
         y: 0
@@ -394,8 +393,7 @@ export class CubeControlService {
 
   // Lets use cube.js to solve our cuber for us
   getSolution(faceArray: string) {
-    let newCube = Cube.fromString(faceArray);
-    let solvedCube = newCube.solve();
+    let solvedCube = Cube.fromString(faceArray).solve();
     let solutionArray = solvedCube.split(' ');
     let returnArray = [];
     for (let char of solutionArray) {
@@ -464,6 +462,7 @@ export class CubeControlService {
       this.cube.twist(solution);
     } else {
       console.warn('an invalid cube was passed, ignoring....')
+      this.turnRegular()
     }
   }
 
@@ -473,7 +472,6 @@ export class CubeControlService {
 
   validateCubeState(currentState: string) {
     if (currentState.length != 54) return false;
-
     for (let value of Object.values(this.originalColorFace)) {
       if ([...currentState].filter(char => char == value).length != 9) {
         return false;

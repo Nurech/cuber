@@ -163,7 +163,7 @@ ERNO.Cube = function( parameters ){
   //	To display our cube, we'll need some 3D specific attributes, like a camera
 
   var
-    FIELD_OF_VIEW = 35,
+    FIELD_OF_VIEW = 40,
     WIDTH         = window.innerWidth,
     HEIGHT        = window.innerHeight,
     ASPECT_RATIO  = WIDTH / HEIGHT,

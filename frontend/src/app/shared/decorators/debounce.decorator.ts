@@ -12,7 +12,7 @@
 /**
  * Debounce a method
  */
-export function NgDebounce(timeout: number, cancelDebounce?: CallableFunction) {
+export function NgDebounce(timeout: number, randomize?: boolean, cancelDebounce?: CallableFunction) {
   // store timeout value for cancel the timeout
   let timeoutRef: any = null;
 
@@ -23,6 +23,10 @@ export function NgDebounce(timeout: number, cancelDebounce?: CallableFunction) {
 
     // override original function body
     descriptor.value = function debounce(...args: any[]) {
+
+      if (randomize) {
+        timeout = Math.floor(Math.random() * timeout)
+      }
 
       // clear previous timeout
       clearTimeout(timeoutRef);

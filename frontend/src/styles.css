@@ -1,4 +1,68 @@
 /* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: Rubiks;
+  src: url('src/assets/fonts/Rubik-VariableFont_wght.ttf');
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@font-face {
+  font-family: Cuber;
+  src: url('src/assets/js/cuber/build/media/RubikExtended.otf');
+}
+
+html, body {
+  height: 100%;
+  color: white;
+}
+
+body {
+  margin: 0;
+  font-family: Rubiks, serif;
+}
+
+
+.greenbg {
+  background: radial-gradient(circle at center, rgb(93, 124, 60) 0%, #1a1a1a 80%);
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+}
+
+.graybg {
+  background: radial-gradient(circle at center, rgb(89, 89, 89) 0%, #1a1a1a 80%);
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+}
+
+.show {
+  opacity: 1;
+  transition: opacity 1s;
+}
+
+.hide {
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+.graybg-main {
+  background: #1a1a1a;
+}
+
+.mat-tab-label {
+  font-family: Cuber, serif !important;
+  color: white !important;
+}
+
+.mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+  background-color: #abaea7 !important;
+}
+
+.mat-tab-list {
+  width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.mat-tab-label {
+  padding: 0 14px !important;
+}

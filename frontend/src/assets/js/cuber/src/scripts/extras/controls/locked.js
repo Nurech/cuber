@@ -71,16 +71,16 @@ ERNO.Locked = function ( cube, camera, domElement ) {
 					current.set( x, y, 0 );
 
 
-					domElement.removeEventListener( 'mousedown', onInteractStart );
-					document.addEventListener( 'mousemove', 	 onInteractMove );
-					document.addEventListener( 'mouseup', 		 onInteractEnd );
+          domElement.removeEventListener('mousedown', onInteractStart, {passive: false});
+          document.addEventListener('mousemove', onInteractMove, {passive: false});
+          document.addEventListener('mouseup', onInteractEnd, {passive: false});
 
-					domElement.removeEventListener( 'touchstart',onInteractStart );
-					document.addEventListener( 'touchmove', 	 onInteractMove );
-					document.addEventListener( 'touchend', 		 onInteractEnd );
+          domElement.removeEventListener('touchstart', onInteractStart);
+          document.addEventListener('touchmove', onInteractMove, {passive: false});
+          document.addEventListener('touchend', onInteractEnd, {passive: false});
 
 
-				}
+        }
 
 			}
 

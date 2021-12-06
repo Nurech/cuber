@@ -1,0 +1,22 @@
+.live {
+  animation: color-change 1s infinite;
+}
+
+@keyframes color-change {
+  0% { color: #f61a1a; }
+  50% { color: white; }
+  100% { color: #f61a1a; }
+}
+
+.chips-container {
+  position: relative;
+}
+
+.tab-container {
+  display: flex;
+  justify-content: center;
+}
+
+.mat-tab-body.mat-tab-body-active {
+  position: absolute !important;
+}

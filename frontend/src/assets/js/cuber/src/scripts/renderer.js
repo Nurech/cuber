@@ -60,10 +60,12 @@ ERNO.renderers.CSS3D = function( cubelets, cube ){
 
 
 	function showItem( item ){
-		item.style.display = 'block';
+		// item.style.display = 'block';
+    item.style.opacity = 1;
 	}
 	function hideItem( item ){
-		item.style.display = 'none';
+		// item.style.display = 'none';
+    item.style.opacity = 0;
 	}
 
 	function getFaceLabelElements(){

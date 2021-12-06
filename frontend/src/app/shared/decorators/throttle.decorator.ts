@@ -12,7 +12,7 @@
  * Throttle a method
  */
 export function NgThrottle(throttleMs: number) {
-  let timeout;
+  let timeout: any;
 
   return function(
     target: any,

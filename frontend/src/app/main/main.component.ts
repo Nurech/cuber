@@ -10,6 +10,9 @@ declare var presets: any;
 })
 export class MainComponent implements OnInit {
   private cube: any;
+  isSolved = true;
+  isHidden = true;
+  isLiveSolving = false;
 
   constructor(private cubeControlService: CubeControlService) {
   }
@@ -20,6 +23,8 @@ export class MainComponent implements OnInit {
 
   ngOnInit(): void {
     this.cubeControlService.currentCube.subscribe(cube => this.cube = cube)
+    this.subscriptions();
+    this.cubeControlService.createNewCube()
   }
 
   onShuffle() {
@@ -57,6 +62,7 @@ export class MainComponent implements OnInit {
   ready() {
     this.cubeControlService.createNewCube()
     this.cube = window.cube;
+    this.isSolved = true;
   }
 
 
@@ -150,6 +156,11 @@ export class MainComponent implements OnInit {
 
   getCubeCurrentState() {
     this.cubeControlService.getCubeCurrentState()
+  }
+
+  private subscriptions() {
+    this.cubeControlService.isSolved.subscribe( data => this.isSolved = data )
+    this.cubeControlService.isHidden.subscribe( data => this.isHidden = data )
   }
 }
 

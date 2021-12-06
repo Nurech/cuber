@@ -14,7 +14,7 @@ import { environment } from '../../../environments/environment';
  * Console log a method and its params passed though
  */
 
-export function NgLog(target, key, descriptor) {
+export function NgLog(target: any, key: any, descriptor: any) {
 
   if (environment.production) {return;}
 

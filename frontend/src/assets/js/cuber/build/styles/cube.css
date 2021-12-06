@@ -36,7 +36,9 @@
 */
 .faceLabel {
 
-  display: none;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.5s;
   position: absolute;
   font-size: 60px;
   text-align: center;
@@ -98,8 +100,6 @@
 
   padding: 0.05em;
   -webkit-box-sizing: border-box;
-  -o-box-sizing: border-box;
-  -ms-box-sizing: border-box;
   box-sizing: border-box;
 
 }
@@ -221,9 +221,8 @@ padding: 0 !important;
 
 .cube .sticker.stickerLogo {
 
-  background: #F3F3F3 url( "../media/rubiksLogoClassic.png" );
   background-size: 100% 100%;
-  background-repeat: none;
+  background: #F3F3F3 url("../media/rubiksLogoClassic.png");
 }
 
 

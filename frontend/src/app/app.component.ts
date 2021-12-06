@@ -9,6 +9,7 @@ export class AppComponent implements OnInit {
   title = 'cuber';
 
   ngOnInit() {
+    console.warn('Nothing to see here, please see README for info.')
   }
 }
 

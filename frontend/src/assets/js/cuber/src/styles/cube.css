@@ -29,11 +29,12 @@
 */
 .faceLabel {
 
-	display: none;
+  opacity: 0;
+  transition: opacity 0.5s;
 	position: absolute;
 	font-size: 60px;
 	text-align: center;
-	font-family: "RubikExtended";
+  font-family: "RubikExtended", serif;
 	text-shadow: 0 0 24px rgba( 0, 0, 0, 0.3 );
 	color: #FFF;
 }
@@ -86,15 +87,12 @@
 
 	-webkit-backface-visibility: hidden;
   	-moz-backface-visibility:    hidden;
-  	-o-backface-visibility:      hidden;
   	backface-visibility:         hidden;
 
 
   	padding: 0.05em;
   	-moz-box-sizing: border-box;
   	-webkit-box-sizing: border-box;
-  	-o-box-sizing: border-box;
-  	-ms-box-sizing: border-box;
 	box-sizing: border-box;
 
 }
@@ -209,9 +207,8 @@
 
 .cube .sticker.stickerLogo {
 
-	background: #F3F3F3 url( "../media/rubiksLogoClassic.png" );
-	background-size: 100% 100%;
-	background-repeat: none;
+  background-size: 100% 100%;
+  background: #F3F3F3 url("../media/rubiksLogoClassic.png");
 }
 
 
@@ -287,6 +284,5 @@
 
 	-webkit-backface-visibility: hidden;
   	-moz-backface-visibility:    hidden;
-  	-o-backface-visibility:      hidden;
   	backface-visibility:         hidden;
 }
