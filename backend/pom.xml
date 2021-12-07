@@ -72,7 +72,7 @@
                 <version>3.0.3</version>
                 <configuration>
                     <processTypes>
-                        <web>java $JAVA_TOOL_OPTIONS -jar target/cuber-backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=heroku</web>
+                        <web>java $JAVA_OPTS -jar -Dserver.port=$PORT target/cuber-backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=heroku</web>
                     </processTypes>
                     <includeTarget>false</includeTarget>
                 </configuration>
