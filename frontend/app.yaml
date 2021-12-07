@@ -1,3 +1,5 @@
+#For Google Cloud
+
 runtime: java8
 instance_class: F1
 automatic_scaling:

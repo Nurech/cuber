@@ -11,6 +11,7 @@
 
 html, body {
   height: 100%;
+  font-size: 1rem;
   color: white;
 }
 
@@ -51,6 +52,8 @@ body {
 .mat-tab-label {
   font-family: Cuber, serif !important;
   color: white !important;
+  padding: 0 12px !important;
+  font-size: 1em;
 }
 
 .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
