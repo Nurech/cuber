@@ -1,2 +1,1 @@
-web: java $JAVA_OPTS -Dserver.port=$PORT -jar -cp target/classes:target/dependency/* com.cuber
-.BackendApplication
+web: -cp target/ java -jar cuber-backend-0.0.1-SNAPSHOT.jar
