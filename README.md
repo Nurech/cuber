@@ -1,2 +1,2 @@
 # cuber
-[![build status](https://github.com/Nurech/cuber/workflows/Build/badge.svg)](https://github.com/Nurech/angular-github-actions/actions)
+![example workflow](https://github.com/Nurech/cuber/actions/workflows/github-action-heroku/badge.svg)
