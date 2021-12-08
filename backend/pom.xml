@@ -56,6 +56,10 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.cuber</groupId>
             <artifactId>cuber-frontend</artifactId>
             <version>${project.version}</version>
