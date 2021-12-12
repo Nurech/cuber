@@ -24,6 +24,15 @@ export class IconModule {
    */ {
     this.matIconRegistry
         .addSvgIcon('leaderboard', this.setPath(`${this.path}/icons/leaderboard_black_24dp.svg`))
+        .addSvgIcon('right', this.setPath(`${this.path}/icons/chevron_right_black_24dp.svg`))
+        .addSvgIcon('auto_fix_high', this.setPath(`${this.path}/icons/auto_fix_high_black_24dp.svg`))
+        .addSvgIcon('cast_connected', this.setPath(`${this.path}/icons/cast_connected_black_24dp.svg`))
+        .addSvgIcon('cast', this.setPath(`${this.path}/icons/cast_black_24dp.svg`))
+        .addSvgIcon('3d', this.setPath(`${this.path}/icons/3d_rotation_black_24dp.svg`))
+        .addSvgIcon('360', this.setPath(`${this.path}/icons/360_black_24dp.svg`))
+        .addSvgIcon('first', this.setPath(`${this.path}/icons/first_page_black_24dp.svg`))
+        .addSvgIcon('left', this.setPath(`${this.path}/icons/chevron_left_black_24dp.svg`))
+        .addSvgIcon('last', this.setPath(`${this.path}/icons/last_page_black_24dp.svg`))
         .addSvgIcon('home', this.setPath(`${this.path}/icons/home_black_24dp.svg`))
         .addSvgIcon('tap_and_play', this.setPath(`${this.path}/icons/tap_and_play_black_24dp.svg`))
         .addSvgIcon('info', this.setPath(`${this.path}/icons/info_black_24dp.svg`))

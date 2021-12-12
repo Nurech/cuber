@@ -572,4 +572,33 @@ export class CubeControlService {
     this.cube.isReady = false;
 
   }
+
+  onEnable360(is3D: boolean) {
+    console.log(is3D)
+    if (is3D) {
+      console.log('enableing freeroam')
+      this.cube.domElement.removeEventListener('mousedown', () => null);
+      document.removeEventListener('mousemove',() => null);
+      document.removeEventListener('mouseup', () => null);
+
+      this.cube.domElement.removeEventListener('touchstart', () => null);
+      document.removeEventListener('touchmove',() => null);
+      document.removeEventListener('touchend', () => null);
+      this.cube.domElement.removeEventListener( 'mousedown', 	() => null );
+      this.cube.domElement.removeEventListener( 'touchstart',  () => null);
+
+      this.cube.controls = new ( window.ERNO.Controls )( this.cube, this.cube.camera, this.cube.domElement )
+    } else {
+      console.log('enableing locked')
+      const fixedOrientation = new window.THREE.Euler(Math.PI * 0.1, Math.PI * -0.25, 0);
+      this.cube.object3D.lookAt(this.cube.camera.position);
+      this.cube.rotation.x += fixedOrientation.x;
+      this.cube.rotation.y += fixedOrientation.y;
+      this.cube.rotation.z += fixedOrientation.z;
+      this.cube.controls = new ( window.ERNO.Locked )( this.cube, this.cube.camera, this.cube.domElement )
+    }
+
+    console.log('enableing 360')
+    console.log(this.cube)
+  }
 }

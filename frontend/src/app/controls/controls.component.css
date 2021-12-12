@@ -1,0 +1,84 @@
+.status-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin: 0.5rem 0;
+  z-index: 1;
+}
+
+.mid-controls-container {
+  position: absolute;
+  justify-content: center;
+  width: 100%;
+  display: flex;
+  bottom: 1rem;
+  z-index: 1;
+}
+
+.side-controls-container {
+  position: absolute;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  margin: 0 -1rem;
+  bottom: 1rem;
+  right: 1.5rem;
+  z-index: 1;
+}
+
+.control-button {
+  margin: 5px 5px;
+}
+
+.status-icon {
+  opacity: 0.5;
+  padding: 0 5px;
+  transition: filter 0.3s;
+}
+
+.show-status {
+  filter: blur(0px);
+}
+
+.hide-status {
+  filter: blur(100px);
+}
+
+.right-control-button {
+  margin: 5px 0;
+}
+
+.button-active {
+  background-color: #1976d2 !important;
+}
+
+mat-slider {
+  width: 50%;
+}
+
+.mid-slider {
+  position: absolute;
+  justify-content: center;
+  width: 100%;
+  display: flex;
+  bottom: 3rem;
+  z-index: 1;
+}
+
+:host ::ng-deep .mat-slider-thumb-label {
+  transform: rotate(45deg) !important;
+  border-radius: 50% 50% 0 !important;
+}
+
+:host ::ng-deep .mat-slider-thumb {
+  transform: scale(0) !important;
+}
+
+:host ::ng-deep .mat-slider-thumb-label-text {
+  opacity: 1 !important;
+}
+
+:host ::ng-deep mat-slider.mat-slider.mat-slider-horizontal .mat-slider-ticks {
+  opacity: 1 !important;
+}

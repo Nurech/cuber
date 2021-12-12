@@ -12,9 +12,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { AboutComponent } from './about/about.component';
-import { FreePlayComponent } from './free-play/free-play.component';
-import { IconModule } from './icon.module';
+import { IconModule } from './shared/icon.module';
 import { HttpClientModule } from '@angular/common/http';
+import { ControlsComponent } from './controls/controls.component';
+import { MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
   declarations: [
@@ -24,19 +25,20 @@ import { HttpClientModule } from '@angular/common/http';
     NavBarComponent,
     DisableDirective,
     AboutComponent,
-    FreePlayComponent,
+    ControlsComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatButtonModule,
-    MatChipsModule,
-    MatIconModule,
-    MatTabsModule,
-    IconModule,
-    HttpClientModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatButtonModule,
+        MatChipsModule,
+        MatIconModule,
+        MatTabsModule,
+        IconModule,
+        HttpClientModule,
+        MatSliderModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

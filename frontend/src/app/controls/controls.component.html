@@ -1,0 +1,40 @@
+<div class="status-container">
+  <mat-icon [svgIcon]="'3d'" class="status-icon" [ngClass]="{'show-status' : is3D,'hide-status' : !is3D}"></mat-icon>
+  <mat-icon [svgIcon]="'cast_connected'" class="status-icon"
+            [ngClass]="{'show-status' : isCastConnected,'hide-status' : !isCastConnected}"></mat-icon>
+</div>
+
+<div class="mid-slider alternate-theme">
+  <mat-slider
+    [color]="'accent'"
+    [disabled]="false"
+    [tickInterval]="'auto'"
+    thumbLabel
+    [displayWith]="formatLabel"
+    aria-label="units"></mat-slider>
+</div>
+
+<div class="mid-controls-container alternate-theme" >
+  <button mat-mini-fab  class="control-button" [color]="'primary'" [disabled]="true">
+    <mat-icon [svgIcon]="'first'"></mat-icon>
+  </button>
+  <button mat-mini-fab  class="control-button" color="primary" [disabled]="false">
+    <mat-icon [svgIcon]="'left'"></mat-icon>
+  </button>
+  <button mat-mini-fab  class="control-button" [color]="'primary'" [disabled]="false">
+    <mat-icon [svgIcon]="'last'"></mat-icon>
+  </button>
+  <button mat-mini-fab  class="control-button" color="primary" [disabled]="true">
+    <mat-icon [svgIcon]="'last'"></mat-icon>
+  </button>
+</div>
+
+<div class="side-controls-container alternate-theme" >
+  <button mat-mini-fab  class="right-control-button" [color]="'primary'" [disabled]="false">
+    <mat-icon [svgIcon]="'auto_fix_high'"></mat-icon>
+  </button>
+  <button mat-mini-fab  class="right-control-button" [color]="'primary'"[disabled]="false"
+          [ngClass]="{'button-active' : is3D}" (click)="onEnable360()">
+    <mat-icon [svgIcon]="'360'"></mat-icon>
+  </button>
+</div>

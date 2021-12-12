@@ -1,5 +1,11 @@
 ERNO.Locked = function ( cube, camera, domElement ) {
 
+  cube = window.cube ? window.cube : cube
+    if (window.cube) {
+      camera = window.cube.camera ? window.cube.camera : cube
+      domElement = window.cube.domElement ? window.cube.domElement : domElement
+    }
+
 	cube.domElement.ondragstart = function(){ return false };
 
 
@@ -12,13 +18,15 @@ ERNO.Locked = function ( cube, camera, domElement ) {
 
 	var projector = new ERNO.Projector( cube, domElement ),
 
+
 		axis = new THREE.Vector3(),
 		current = new THREE.Vector3(),
 		start = new THREE.Vector3(),
 		direction = new THREE.Vector3(),
 		inverse = new THREE.Matrix4(),
 		absDirection = new THREE.Vector3(),
-		group, time, screen, sign,
+		group,
+    time, screen, sign,
 		pixelRatio = window.devicePixelRatio || 1;
 		axisDefined = false;
 
@@ -360,9 +368,9 @@ ERNO.Locked = function ( cube, camera, domElement ) {
 			// ERNO.Cube maintains 3 special groups (X, Y, Z ) that contain all cubelets,
 			// but with a different axis of rotation.
 
-			if     ( Math.abs( Math.round( axis.x )) === 1 ) group = cube.slicesDictionary[ 'z' ];
-			else if( Math.abs( Math.round( axis.y )) === 1 ) group = cube.slicesDictionary[ 'y' ];
-			else if( Math.abs( Math.round( axis.z )) === 1 ) group = cube.slicesDictionary[ 'x' ];
+			if     ( Math.abs( Math.round( axis.x )) === 1 ) group = window.cube ?  window.cube.slicesDictionary[ 'z' ] : cube.slicesDictionary[ 'z' ];
+			else if( Math.abs( Math.round( axis.y )) === 1 ) group =  window.cube ? window.cube.slicesDictionary[ 'y' ] : cube.slicesDictionary[ 'y' ];
+			else if( Math.abs( Math.round( axis.z )) === 1 ) group = window.cube ? window.cube.slicesDictionary[ 'x' ]: cube.slicesDictionary[ 'x' ];
 
 
 

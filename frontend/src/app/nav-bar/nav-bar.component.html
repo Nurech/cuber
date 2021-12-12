@@ -10,19 +10,13 @@
   <mat-tab-group (selectedTabChange)="onTabChange($event)">
     <mat-tab>
       <ng-template mat-tab-label>
-        <mat-icon [svgIcon]="'home'"></mat-icon>
-      </ng-template>
-    </mat-tab>
-
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <mat-icon [svgIcon]="'live_tv'"></mat-icon><span style="font-size: 22px" [ngClass]="{'live' : isLiveSolving}">·</span>
-      </ng-template>
-    </mat-tab>
-
-    <mat-tab>
-      <ng-template mat-tab-label>
         <mat-icon [svgIcon]="'videogame'"></mat-icon>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon [svgIcon]="'cast'"></mat-icon><span style="font-size: 22px" [ngClass]="{'live' : isLiveSolving}">·</span>
       </ng-template>
     </mat-tab>
 
