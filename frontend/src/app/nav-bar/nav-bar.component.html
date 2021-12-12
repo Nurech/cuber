@@ -1,30 +1,41 @@
-<div class="chips-container">Robot: <strong>OFFLINE</strong></div>
+<div class="title">
+  <span class="letter">C</span>
+  <span class="letter">U</span>
+  <span class="letter">B</span>
+  <span class="letter">E</span>
+  <span>R</span>
+</div>
+
 <div class="tab-container">
   <mat-tab-group (selectedTabChange)="onTabChange($event)">
     <mat-tab>
       <ng-template mat-tab-label>
-        HOME
+        <mat-icon [svgIcon]="'home'"></mat-icon>
       </ng-template>
     </mat-tab>
 
     <mat-tab>
       <ng-template mat-tab-label>
-        LIVE<span style="font-size: 22px" [ngClass]="{'live' : isLiveSolving}">·</span>
+        <mat-icon [svgIcon]="'live_tv'"></mat-icon><span style="font-size: 22px" [ngClass]="{'live' : isLiveSolving}">·</span>
       </ng-template>
     </mat-tab>
 
     <mat-tab>
       <ng-template mat-tab-label>
-        FREE PLAY
+        <mat-icon [svgIcon]="'videogame'"></mat-icon>
       </ng-template>
     </mat-tab>
 
-    <mat-tab [disabled]="true">
+    <mat-tab>
       <ng-template mat-tab-label>
-        ABOUT
-        <mat-icon>lock</mat-icon>
+        <mat-icon [svgIcon]="'leaderboard'"></mat-icon>
       </ng-template>
+    </mat-tab>
 
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon [svgIcon]="'info'"></mat-icon>
+      </ng-template>
     </mat-tab>
   </mat-tab-group>
 </div>

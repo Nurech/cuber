@@ -15,6 +15,7 @@
   "exclude": [
     "node_modules",
     "dist",
-    "src/assets"
+    "src/assets",
+    "src/**/*.worker.ts"
   ]
 }

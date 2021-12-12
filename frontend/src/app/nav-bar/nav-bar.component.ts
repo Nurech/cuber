@@ -17,6 +17,8 @@ export class NavBarComponent implements OnInit {
 
   onTabChange(event: MatTabChangeEvent) {
     console.log(event)
+    this.cubeControlService.getCubeCurrentState()
+    // this.cubeControlService.cube.showFaceLabels();
     this.cubeControlService.userOnTab.next(event.index)
   }
 }

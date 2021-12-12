@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
 import { Cubelet, Direction } from '../shared/models/cube-model';
 import { NgDebounce } from '../shared/decorators/debounce.decorator';
+
 const cloneDeep = require('clone-deep');
 const Cube = require('cubejs');
 declare var TWEEN: any;
+const Queue = require('js-queue');
 
 declare global {
   interface Window {
@@ -27,10 +29,11 @@ declare global {
   providedIn: 'root'
 })
 export class CubeControlService {
+  q = new Queue;
   cube: any;
   cube_copy: any;
   private hideInvisibleFaces = false;
-  private useLockedControls = false;
+  private useLockedControls = true;
   currentCube = new ReplaySubject<any>(1);
   COLORLESS = window.COLORLESS;
   //                  0            1           2           3            4            5
@@ -111,8 +114,8 @@ export class CubeControlService {
   userOnTab = new BehaviorSubject<number>(0);
 
   constructor() {
-    // This takes 4-5 seconds on a modern computer
-    Cube.initSolver();
+    this.q.autoRun = true;
+    this.startCubeSolver();
   }
 
 
@@ -290,7 +293,7 @@ export class CubeControlService {
     }
     this.addEventListeners();
     this.cube.twistDuration = 100;
-    this.presetBling()
+    this.playIntro()
     console.log(window);
     console.log(this.cube);
   }
@@ -302,7 +305,7 @@ export class CubeControlService {
     this.isHidden.next(false)
     new window.TWEEN.Tween(this.cube.position)
       .to({
-        y: 0
+        y: -150
       }, 1000 * 2)
       .easing(window.TWEEN.Easing.Quartic.Out)
       .start();
@@ -368,14 +371,20 @@ export class CubeControlService {
         .delay(delay)
         .easing(window.TWEEN.Easing.Quartic.Out)
         .onComplete(() => {
-
           cubelet.isTweening = false;
+
+          const blingFinished = new CustomEvent('blingFinished', {
+            detail: {
+              isTweening: false
+            }
+          });
+          this.cube.dispatchEvent(blingFinished)
+
         })
         .start();
 
       cubelet.isTweening = true;
     });
-
   }
 
   getRandomIntInclusive(min: number, max: number) {
@@ -413,6 +422,51 @@ export class CubeControlService {
     return returnArray.join('');
   }
 
+
+  // Prints message on cube like it is talking
+  async cubeTalk(message: string, timing?: number) {
+    this.q.add(() => this.printMessage(message, timing));
+  }
+
+  // Use timing coefficient to increase/decrease delay (1 is default)
+  async printMessage(message: string, timing?: number) {
+
+    const timer = (ms: number) => new Promise<number>(res => setTimeout(res, ms));
+
+    const letterDelay = timing ? timing * 35 : 35;
+    const waitDelay = timing ? timing * 500 : 500;
+
+    let textLabel = document.getElementById('textLabel');
+    if (!textLabel) return;
+
+    const arrayOfChars = message.split('');
+
+    textLabel.innerHTML = '';
+    while (textLabel.firstChild) {
+      textLabel.firstChild.remove();
+    }
+    this.cube.showLabelText();
+    for (let char of arrayOfChars) {
+      setTimeout(() => {
+        let span = document.createElement('span');
+        span.innerHTML = char;
+        span.classList.add('letter');
+        span.style.opacity = String(1);
+        if (textLabel) {
+          textLabel.appendChild(span);
+        }
+      }, await timer(letterDelay));
+    }
+    setTimeout(() => {
+    }, await timer(waitDelay * 2 + (arrayOfChars.length * letterDelay)));
+    console.warn('returning');
+    this.cube.hideLabelText();
+    setTimeout(() => {
+      this.q.next();
+    }, await timer(waitDelay));
+    return;
+  }
+
   logCube() {
     console.log(window);
     console.log(window.cube);
@@ -431,24 +485,12 @@ export class CubeControlService {
       for (let cubeletId of v1) {
         for (let [k2, v2] of Object.entries(this.originalColorFace)) {
           if (k2 == this.cube.cubelets[cubeletId][k1].color.name) {
-            if (k1 == 'up') {
-              up.push(v2);
-            }
-            if (k1 == 'right') {
-              right.push(v2);
-            }
-            if (k1 == 'front') {
-              front.push(v2);
-            }
-            if (k1 == 'down') {
-              down.push(v2);
-            }
-            if (k1 == 'left') {
-              left.push(v2);
-            }
-            if (k1 == 'back') {
-              back.push(v2);
-            }
+            if (k1 == 'up') up.push(v2);
+            if (k1 == 'right') right.push(v2);
+            if (k1 == 'front') front.push(v2);
+            if (k1 == 'down') down.push(v2);
+            if (k1 == 'left') left.push(v2);
+            if (k1 == 'back') back.push(v2);
           }
         }
       }
@@ -478,5 +520,56 @@ export class CubeControlService {
       }
     }
     return true; // so I guess it is valid
+  }
+
+  async startCubeSolver()  {
+    Cube.initSolver()
+    if (typeof Worker !== 'undefined') {
+      const worker = new Worker('../app.worker',
+        { type: 'module' });
+
+      worker.onmessage = ({ data }) => {
+        console.log(`page got message: ${data}`);
+      };
+      worker.postMessage('hello');
+    }
+  }
+
+  private playIntro() {
+    this.presetBling();
+    this.cube.addEventListener('blingFinished', () => this.afterBling());
+  }
+
+  @NgDebounce(750)
+  private afterBling() {
+    this.cubeTalk('HELLO', 2);
+    this.cubeTalk('I AM CUBE...');
+    this.cubeTalk('GIVE ME A PUZZLE TO SOLVE');
+    this.tweenToMiddle();
+  }
+
+  tweenToMiddle() {
+    new window.TWEEN.Tween(this.cube.position)
+      .to({
+        y: -25
+      }, 1000 * 2)
+      .easing(window.TWEEN.Easing.Quartic.Out)
+      .start();
+
+    new window.TWEEN.Tween(this.cube.rotation)
+      .to({
+        x: this.degreesToRadians(25),
+        y: this.degreesToRadians(-27),
+        z: this.degreesToRadians(0),
+      }, 1000 * 3)
+      .easing(window.TWEEN.Easing.Quartic.Out)
+      .onComplete(() => {
+
+        this.cube.isReady = true;
+
+      })
+      .start();
+    this.cube.isReady = false;
+
   }
 }

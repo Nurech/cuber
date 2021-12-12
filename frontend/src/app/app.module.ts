@@ -13,7 +13,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { AboutComponent } from './about/about.component';
 import { FreePlayComponent } from './free-play/free-play.component';
-import { LiveComponent } from './live/live.component';
+import { IconModule } from './icon.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,6 @@ import { LiveComponent } from './live/live.component';
     DisableDirective,
     AboutComponent,
     FreePlayComponent,
-    LiveComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +33,9 @@ import { LiveComponent } from './live/live.component';
     MatButtonModule,
     MatChipsModule,
     MatIconModule,
-    MatTabsModule
+    MatTabsModule,
+    IconModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

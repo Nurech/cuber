@@ -12,4 +12,3 @@ export class AppComponent implements OnInit {
     console.warn('Nothing to see here, please see README for info. https://github.com/Nurech/cuber#readme')
   }
 }
-

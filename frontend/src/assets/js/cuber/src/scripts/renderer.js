@@ -38,19 +38,35 @@ ERNO.renderers.CSS3D = function( cubelets, cube ){
 
 	//	FACE LABELS
 
-	var faceLabel, axis = new THREE.Vector3();
-	cube.faces.forEach( function( face, i ){
+  var faceLabel, axis = new THREE.Vector3();
+  cube.faces.forEach(function (face, i) {
 
-		faceLabel = cube[face.face].label = new THREE.CSS3DObject( document.createElement( 'div' ) );
+    faceLabel = cube[face.face].label = new THREE.CSS3DObject(document.createElement('div'));
+    faceLabel.element.classList.add('faceLabel');
+    faceLabel.position.copy(face.axis).multiplyScalar(cube.size);
+    faceLabel.position.negate();
+    faceLabel.element.innerHTML = face.face.toUpperCase();
+    cube.object3D.add(faceLabel);
 
-		faceLabel.element.classList.add( 'faceLabel' );
-		faceLabel.position.copy( face.axis ).multiplyScalar( cube.size );
-		faceLabel.position.negate();
 
-		faceLabel.element.innerHTML = face.face.toUpperCase();
-		cube.object3D.add( faceLabel );
-
-	})
+    if (face.face === "up") {
+      console.warn(faceLabel)
+      console.warn(face)
+      console.warn('face is up')
+      faceLabel = cube.text = new THREE.CSS3DObject(document.createElement('div'));
+      faceLabel.element.classList.add('textLabel');
+      faceLabel.position.copy(face.axis).multiplyScalar(cube.size);
+      let position =  faceLabel.position
+      position.x = 0
+      position.y = -250
+      position.z = 180
+      faceLabel.position = position
+      faceLabel.position.negate();
+      faceLabel.element.setAttribute('id', 'textLabel')
+      faceLabel.element.innerHTML = "HELLO I AM CUBE";
+      cube.object3D.add(faceLabel);
+    }
+  })
 
 	cube.right.label.rotation.y = Math.PI *  0.5;
 	cube.left.label.rotation.y 	= Math.PI * -0.5;
@@ -72,6 +88,10 @@ ERNO.renderers.CSS3D = function( cubelets, cube ){
 		return Array.prototype.slice.call( renderer.domElement.querySelectorAll( '.faceLabel' ));
 	}
 
+  function getTextLabelElements(){
+    return Array.prototype.slice.call( renderer.domElement.querySelectorAll( '.textLabel' ));
+  }
+
 
 	cube.showFaceLabels = function(){
 
@@ -82,7 +102,6 @@ ERNO.renderers.CSS3D = function( cubelets, cube ){
 
 	}
 
-
 	cube.hideFaceLabels = function(){
 
 		getFaceLabelElements().forEach( hideItem );
@@ -90,7 +109,25 @@ ERNO.renderers.CSS3D = function( cubelets, cube ){
 
 		return this;
 	}
+  /**
+   * Added this
+   */
 
+  cube.showLabelText = function(){
+
+    getTextLabelElements().forEach( showItem );
+    this.showingFaceLabels = false;
+
+    return this;
+  }
+
+  cube.hideLabelText = function(){
+
+    getTextLabelElements().forEach( hideItem );
+    this.showingFaceLabels = false;
+
+    return this;
+  }
 
 
 

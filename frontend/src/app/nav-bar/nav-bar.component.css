@@ -3,13 +3,27 @@
 }
 
 @keyframes color-change {
-  0% { color: #f61a1a; }
-  50% { color: white; }
-  100% { color: #f61a1a; }
+  0% {
+    color: #f61a1a;
+  }
+  50% {
+    color: white;
+  }
+  100% {
+    color: #f61a1a;
+  }
 }
 
-.chips-container {
+
+.title {
   position: relative;
+  font-family: Cuber, serif;
+  text-align: center;
+  padding: 1% 3% 3% 3%;
+}
+
+.letter {
+  letter-spacing: 15vw;
 }
 
 .tab-container {

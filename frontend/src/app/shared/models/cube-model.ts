@@ -19,7 +19,9 @@ export interface Cuber {
   size: number;
   cubeletSize: number;
   hideFaceLabels: Function;
+  hideLabelText: Function;
   showFaceLabels: Function;
+  showLabelText: Function;
   redo: Function;
   undo: Function;
   shuffle: Function;

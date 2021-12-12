@@ -16,3 +16,8 @@
   margin-top: -12px;
   position: absolute;
 }
+
+.letter {
+  opacity: 0;
+  transition: opacity 0.2s;
+}

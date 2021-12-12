@@ -25,11 +25,21 @@
             "aot": true,
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/android-chrome-192x192.png",
+              "src/android-chrome-256x256.png",
+              "src/browserconfig.xml",
+              "src/favicon-16x16.png",
+              "src/favicon-32x32.png",
+              "src/manifest.json",
+              "src/mstile-150x150.png",
+              "src/safari-pinned-tab.svg"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "./node_modules/material-design-icons/iconfont/material-icons.css",
+              "src/assets/js/cuber/build/styles/cube.css",
+              "src/assets/js/cuber/examples/basic/styles/base.css",
               "src/styles.css"
             ],
             "scripts": [
@@ -76,8 +86,10 @@
               "src/assets/js/cuber/src/scripts/extras/controls/locked.js",
               "src/assets/js/cuber/src/scripts/extras/deviceMotion.js",
               "src/assets/js/cuber/examples/basic/scripts/presets.js",
-              "src/assets/js/cuber/src/scripts/extras/inspect.js"
-            ]
+              "src/assets/js/cuber/src/scripts/extras/inspect.js",
+              "src/assets/js/cuber/examples/basic/scripts/jquery.js"
+            ],
+            "webWorkerTsConfig": "tsconfig.worker.json"
           },
           "configurations": {
             "production": {
@@ -150,7 +162,8 @@
             "tsConfig": [
               "tsconfig.app.json",
               "tsconfig.spec.json",
-              "e2e/tsconfig.json"
+              "e2e/tsconfig.json",
+              "tsconfig.worker.json"
             ],
             "exclude": [
               "**/node_modules/**"

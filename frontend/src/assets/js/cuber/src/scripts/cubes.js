@@ -186,6 +186,7 @@ ERNO.Cube = function( parameters ){
   this.position 	= this.object3D.position;
   this.matrix 	= this.object3D.matrix;
   this.matrixWorld= this.object3D.matrixWorld;
+  this.text = null;
 
 
   this.rotation.set(
