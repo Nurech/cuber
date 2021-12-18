@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
 import { Cubelet, Direction } from '../shared/models/cube-model';
 import { NgDebounce } from '../shared/decorators/debounce.decorator';
+import { LockControlsService } from './lock-controls.service';
 
-const cloneDeep = require('clone-deep');
 const Cube = require('cubejs');
 declare var TWEEN: any;
 const Queue = require('js-queue');
@@ -29,12 +29,20 @@ declare global {
   providedIn: 'root'
 })
 export class CubeControlService {
+  hideInvisibleFaces = false;
+  useLockedControls = new BehaviorSubject<boolean>(false);
+  twistDuration: number = 250;
+
+  // Subs
+  isSolved = new BehaviorSubject<boolean>(true);
+  isHidden = new BehaviorSubject<boolean>(true);
+  twistHappened = new Subject<any>();
+  userOnTab = new BehaviorSubject<number>(0);
+  currentCube = new ReplaySubject<any>(1);
+
+
   q = new Queue;
   cube: any;
-  cube_copy: any;
-  private hideInvisibleFaces = false;
-  private useLockedControls = true;
-  currentCube = new ReplaySubject<any>(1);
   COLORLESS = window.COLORLESS;
   //                  0            1           2           3            4            5
   FACES_CSS = ['.faceFront', '.faceUp', '.faceRight', '.faceDown', '.faceLeft', '.faceBack'];
@@ -45,15 +53,15 @@ export class CubeControlService {
 
     //  Front slice
 
-    [6, 5, , ], [6, 5, , ], [6, 5, 3, ],//   0,  1,  2
-    [6, , , , 1], [6, , , ], [6, , 3, ],//   3,  4,  5
+    [6, 5, ], [6, 5, ], [6, 5, 3],//   0,  1,  2
+    [6, , , , 1], [6, , ], [6, , 3],//   3,  4,  5
     [6, , , 4, 1], [6, , , 4], [6, , 3, 4],//   6,  7,  8
 
 
     //  Standing slice
 
-    [, 5, , , 1], [, 5, , ], [, 5, 3, ],//   9, 10, 11
-    [, , , , 1], [, , , ], [, , 3, ],//  12, XX, 14
+    [, 5, , , 1], [, 5, ], [, 5, 3],//   9, 10, 11
+    [, , , , 1], [, , ], [, , 3],//  12, XX, 14
     [, , , 4, 1], [, , , 4], [, , 3, 4],//  15, 16, 17
 
 
@@ -108,12 +116,7 @@ export class CubeControlService {
     'red': 'D'
   };
 
-  // Subs
-  isSolved = new BehaviorSubject<boolean>(true);
-  isHidden = new BehaviorSubject<boolean>(true);
-  userOnTab = new BehaviorSubject<number>(0);
-
-  constructor() {
+  constructor(private lockControlsService: LockControlsService) {
     this.q.autoRun = true;
     this.startCubeSolver();
   }
@@ -124,43 +127,43 @@ export class CubeControlService {
    */
   paintFace(cubeletId: number, faceId: number, colorId: number) {
     setTimeout(() => {
-    const cubelet: Cubelet = this.cube.cubelets[cubeletId];
-    this.quickExplodeImplode(cubelet)
-    const direction: Direction = window.ERNO.Direction.getDirectionById(cubelet.faces[faceId].id);
-    console.log(cubelet);
+      const cubelet: Cubelet = this.cube.cubelets[cubeletId];
+      this.quickExplodeImplode(cubelet);
+      const direction: Direction = window.ERNO.Direction.getDirectionById(cubelet.faces[faceId].id);
+      console.log(cubelet);
 
 
-    // Also change convenience accessors
-    if (direction.name == 'right') {
-      cubelet.right.color = this.COLORS[colorId];
-    } else if (direction.name == 'left') {
-      cubelet.left.color = this.COLORS[colorId];
-    } else if (direction.name == 'up') {
-      cubelet.up.color = this.COLORS[colorId];
-    } else if (direction.name == 'down') {
-      cubelet.down.color = this.COLORS[colorId];
-    } else if (direction.name == 'front') {
-      cubelet.front.color = this.COLORS[colorId];
-    } else if (direction.name == 'back') {
-      cubelet.back.color = this.COLORS[colorId];
-    }
+      // Also change convenience accessors
+      if (direction.name == 'right') {
+        cubelet.right.color = this.COLORS[colorId];
+      } else if (direction.name == 'left') {
+        cubelet.left.color = this.COLORS[colorId];
+      } else if (direction.name == 'up') {
+        cubelet.up.color = this.COLORS[colorId];
+      } else if (direction.name == 'down') {
+        cubelet.down.color = this.COLORS[colorId];
+      } else if (direction.name == 'front') {
+        cubelet.front.color = this.COLORS[colorId];
+      } else if (direction.name == 'back') {
+        cubelet.back.color = this.COLORS[colorId];
+      }
 
-    // Because cube can twist and rotate we need to get it's current direction relative to original face
-    const currentFaceId = direction.id;
+      // Because cube can twist and rotate we need to get it's current direction relative to original face
+      const currentFaceId = direction.id;
 
-    // Change the css
+      // Change the css
 
-    cubelet.changeFaceColor(this.FACES_CSS[currentFaceId], colorId);
+      cubelet.changeFaceColor(this.FACES_CSS[currentFaceId], colorId);
 
-    // But also update cubelet colors
-    let colorsStringArray = cubelet.colors.split('');
-    colorsStringArray[currentFaceId] = this.COLOR_LETTER[colorId];
-    cubelet.colors = colorsStringArray.join('');
-    console.log(cubelet.faces[currentFaceId]);
-    cubelet.faces[currentFaceId].color = this.COLORS[colorId];
-    console.log(cubelet.faces[currentFaceId]);
-    console.log(cubelet);
-    }, Math.floor(Math.random()*1000))
+      // But also update cubelet colors
+      let colorsStringArray = cubelet.colors.split('');
+      colorsStringArray[currentFaceId] = this.COLOR_LETTER[colorId];
+      cubelet.colors = colorsStringArray.join('');
+      console.log(cubelet.faces[currentFaceId]);
+      cubelet.faces[currentFaceId].color = this.COLORS[colorId];
+      console.log(cubelet.faces[currentFaceId]);
+      console.log(cubelet);
+    }, Math.floor(Math.random() * 1000));
   }
 
   quickExplodeImplode(cubelet: Cubelet) {
@@ -210,7 +213,7 @@ export class CubeControlService {
     this.cube.twistDuration = 50;
     setTimeout(() => {
       this.paintRegular();
-    }, this.cube.twistDuration * (this.cube.twistQueue.history.length+1))
+    }, this.cube.twistDuration * (this.cube.twistQueue.history.length + 1));
     while (this.cube.twistQueue.history.length) {
       this.cube.undo();
     }
@@ -219,8 +222,8 @@ export class CubeControlService {
   @NgDebounce(100)
   paintRegular() {
     for (let k = 0; k < this.cube.cubelets.length; k++) {
-      for (let i =0; i < this.defaultMap.length; i++) {
-        for (let j = 0; j < this.defaultMap[i].length; j++){
+      for (let i = 0; i < this.defaultMap.length; i++) {
+        for (let j = 0; j < this.defaultMap[i].length; j++) {
           if (this.defaultMap[i][j]) {
             // @ts-ignore
             this.paintFace(k, j, this.defaultMap[i][j]);
@@ -230,9 +233,10 @@ export class CubeControlService {
     }
   }
 
-  twistComplete(): boolean {
-    console.log(this.cube.isSolved());
-    this.isSolved.next(this.cube.isSolved())
+  twistComplete(e: any): boolean {
+    console.log(this.cube.isSolved(), e);
+    this.isSolved.next(this.cube.isSolved());
+    this.twistHappened.next()
     return true;
   }
 
@@ -265,35 +269,27 @@ export class CubeControlService {
 
     let container = document.getElementById('container');
 
-    let useLockedControls = this.useLockedControls;
-    let controls = useLockedControls ? window.ERNO.Locked : window.ERNO.Freeform;
-
     let ua = navigator.userAgent,
       isIe = ua.indexOf('MSIE') > -1 || ua.indexOf('Trident/') > -1;
 
     window.cube = new window.ERNO.Cube({
       hideInvisibleFaces: this.hideInvisibleFaces,
-      controls: controls,
       renderer: isIe ? window.ERNO.renderers.IeCSS3D : null
     });
     this.cube = window.cube;
-    this.cube_copy = Object.assign({},cloneDeep(window.cube))
-    this.currentCube.next(this.cube);
-
     if (container) {
       container.appendChild(this.cube.domElement);
     }
 
-    if (controls === window.ERNO.Locked) {
-      const fixedOrientation = new window.THREE.Euler(Math.PI * 0.1, Math.PI * -0.25, 0);
-      this.cube.object3D.lookAt(this.cube.camera.position);
-      this.cube.rotation.x += fixedOrientation.x;
-      this.cube.rotation.y += fixedOrientation.y;
-      this.cube.rotation.z += fixedOrientation.z;
+    if (this.useLockedControls.getValue()) {
+      this.changeLocked(false);
+    } else {
+      this.changeLocked(true);
     }
+
     this.addEventListeners();
-    this.cube.twistDuration = 100;
-    this.playIntro()
+    this.cube.twistDuration = this.twistDuration;
+    this.playIntro();
     console.log(window);
     console.log(this.cube);
   }
@@ -302,7 +298,7 @@ export class CubeControlService {
   // Awesome
   presetBling() {
     this.cube.position.y = -2000;
-    this.isHidden.next(false)
+    this.isHidden.next(false);
     new window.TWEEN.Tween(this.cube.position)
       .to({
         y: -150
@@ -378,7 +374,7 @@ export class CubeControlService {
               isTweening: false
             }
           });
-          this.cube.dispatchEvent(blingFinished)
+          this.cube.dispatchEvent(blingFinished);
 
         })
         .start();
@@ -397,31 +393,6 @@ export class CubeControlService {
     return number * Math.PI / 180;
   }
 
-  // Solved cube state is UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB
-  // U means a facelet of the up face color, R means a facelet of the right face color, etc.
-
-  // Lets use cube.js to solve our cuber for us
-  getSolution(faceArray: string) {
-    let solvedCube = Cube.fromString(faceArray).solve();
-    let solutionArray = solvedCube.split(' ');
-    let returnArray = [];
-    for (let char of solutionArray) {
-      if (char.includes('2')) {
-        char = char.replace('2', '');
-        returnArray.push(char);
-      }
-      if (char.includes('\'')) {
-        char = char.replace('\'', '');
-        char = char.toLowerCase();
-        returnArray.push(char);
-      } else {
-        returnArray.push(char);
-      }
-    }
-    console.log(returnArray);
-    return returnArray.join('');
-  }
-
 
   // Prints message on cube like it is talking
   async cubeTalk(message: string, timing?: number) {
@@ -429,6 +400,8 @@ export class CubeControlService {
   }
 
   // Use timing coefficient to increase/decrease delay (1 is default)
+  private y: number | undefined;
+
   async printMessage(message: string, timing?: number) {
 
     const timer = (ms: number) => new Promise<number>(res => setTimeout(res, ms));
@@ -472,7 +445,7 @@ export class CubeControlService {
     console.log(window.cube);
   }
 
-  getCubeCurrentState() {
+  getSolution() {
 
     let up: string[] = [];
     let right: string[] = [];
@@ -499,17 +472,43 @@ export class CubeControlService {
     let currentState: string = up.join('') + right.join('') + front.join('') + down.join('') + left.join('') + back.join('');
     console.log(currentState);
     if (this.validateCubeState(currentState)) {
-      let solution = this.getSolution(currentState);
+      let solution = this.useSolver(currentState);
       console.log(solution);
-      this.cube.twist(solution);
+      return solution;
     } else {
-      console.warn('an invalid cube was passed, ignoring....')
-      this.turnRegular()
+      console.warn('an invalid cube was passed, ignoring....');
+      this.turnRegular();
+      return [];
     }
   }
 
+  // Solved cube state is UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB
+  // U means a facelet of the up face color, R means a facelet of the right face color, etc.
+
+  // Lets use cube.js to solve our cuber for us
+  useSolver(faceArray: string) {
+    let solvedCube = Cube.fromString(faceArray).solve();
+    let solutionArray = solvedCube.split(' ');
+    let returnArray = [];
+    for (let char of solutionArray) {
+      if (char.includes('2')) {
+        char = char.replace('2', '');
+        returnArray.push(char);
+      }
+      if (char.includes('\'')) {
+        char = char.replace('\'', '');
+        char = char.toLowerCase();
+        returnArray.push(char);
+      } else {
+        returnArray.push(char);
+      }
+    }
+    console.log(returnArray);
+    return returnArray;
+  }
+
   private addEventListeners() {
-    this.cube.addEventListener('onTwistComplete', () => this.twistComplete());
+    this.cube.addEventListener('onTwistComplete', (e: any) => this.twistComplete(e));
   }
 
   validateCubeState(currentState: string) {
@@ -522,13 +521,13 @@ export class CubeControlService {
     return true; // so I guess it is valid
   }
 
-  async startCubeSolver()  {
-    Cube.initSolver()
+  async startCubeSolver() {
+    Cube.initSolver();
     if (typeof Worker !== 'undefined') {
       const worker = new Worker('../app.worker',
-        { type: 'module' });
+        {type: 'module'});
 
-      worker.onmessage = ({ data }) => {
+      worker.onmessage = ({data}) => {
         console.log(`page got message: ${data}`);
       };
       worker.postMessage('hello');
@@ -541,28 +540,28 @@ export class CubeControlService {
   }
 
   @NgDebounce(750)
-  private afterBling() {
-    this.cubeTalk('HELLO', 2);
-    this.cubeTalk('I AM CUBE...');
-    this.cubeTalk('GIVE ME A PUZZLE TO SOLVE');
+  private async afterBling() {
+    await this.cubeTalk('HELLO', 2);
+    await this.cubeTalk('I AM CUBE...');
+    await this.cubeTalk('GIVE ME A PUZZLE TO SOLVE');
     this.tweenToMiddle();
   }
 
   tweenToMiddle() {
-    new window.TWEEN.Tween(this.cube.position)
+    new TWEEN.Tween(this.cube.position)
       .to({
         y: -25
-      }, 1000 * 2)
-      .easing(window.TWEEN.Easing.Quartic.Out)
+      }, 500 * 2)
+      .easing(TWEEN.Easing.Quartic.Out)
       .start();
 
-    new window.TWEEN.Tween(this.cube.rotation)
+    new TWEEN.Tween(this.cube.rotation)
       .to({
         x: this.degreesToRadians(25),
         y: this.degreesToRadians(-27),
-        z: this.degreesToRadians(0),
-      }, 1000 * 3)
-      .easing(window.TWEEN.Easing.Quartic.Out)
+        z: this.degreesToRadians(0)
+      }, 500 * 3)
+      .easing(TWEEN.Easing.Quartic.Out)
       .onComplete(() => {
 
         this.cube.isReady = true;
@@ -573,32 +572,19 @@ export class CubeControlService {
 
   }
 
-  onEnable360(is3D: boolean) {
-    console.log(is3D)
-    if (is3D) {
-      console.log('enableing freeroam')
-      this.cube.domElement.removeEventListener('mousedown', () => null);
-      document.removeEventListener('mousemove',() => null);
-      document.removeEventListener('mouseup', () => null);
-
-      this.cube.domElement.removeEventListener('touchstart', () => null);
-      document.removeEventListener('touchmove',() => null);
-      document.removeEventListener('touchend', () => null);
-      this.cube.domElement.removeEventListener( 'mousedown', 	() => null );
-      this.cube.domElement.removeEventListener( 'touchstart',  () => null);
-
-      this.cube.controls = new ( window.ERNO.Controls )( this.cube, this.cube.camera, this.cube.domElement )
+  changeLocked(isLocked: boolean) {
+    console.log(isLocked);
+    this.lockControlsService.lockControls(this.cube, this.cube.camera, this.cube.domElement, true);
+    this.lockControlsService.unlockControls(this.cube, this.cube.camera, this.cube.domElement, true);
+    if (isLocked) {
+      console.log('freeroam');
+      this.cube.controls = new (window.ERNO.Controls)(this.cube, this.cube.camera, this.cube.domElement);
     } else {
-      console.log('enableing locked')
-      const fixedOrientation = new window.THREE.Euler(Math.PI * 0.1, Math.PI * -0.25, 0);
-      this.cube.object3D.lookAt(this.cube.camera.position);
-      this.cube.rotation.x += fixedOrientation.x;
-      this.cube.rotation.y += fixedOrientation.y;
-      this.cube.rotation.z += fixedOrientation.z;
-      this.cube.controls = new ( window.ERNO.Locked )( this.cube, this.cube.camera, this.cube.domElement )
+      this.tweenToMiddle();
+      console.log('locked');
+      this.cube.controls = this.lockControlsService.lockControls(this.cube, this.cube.camera, this.cube.domElement);
     }
-
-    console.log('enableing 360')
-    console.log(this.cube)
+    this.useLockedControls.next(isLocked);
+    console.log(this.cube);
   }
 }

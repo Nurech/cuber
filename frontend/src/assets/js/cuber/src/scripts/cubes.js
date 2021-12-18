@@ -477,6 +477,12 @@ ERNO.Cube = function( parameters ){
 
   }.bind( this ));
 
+  this.mouseInteraction.addEventListener( 'click', function( evt ){
+
+    this.dispatchEvent( new CustomEvent("click", { detail: evt.detail  }));
+
+  }.bind( this ));
+
 
   //	set up interactive controls
   //	The Controls class rotates the entire cube around using an arcball implementation.

@@ -1,5 +1,5 @@
 
-ERNO.Controls = (function(){
+ERNO.Controls = (function() {
 
 	//Enum of states
 	var STATE = { NONE: -1, ROTATE: 0, INERTIA: 1 };
@@ -20,6 +20,7 @@ ERNO.Controls = (function(){
 	}
 
 	return function ( object, camera, domElement ) {
+
 
 		var state 		 = STATE.NONE,
 			direction  	 = new THREE.Vector2,
@@ -81,11 +82,11 @@ ERNO.Controls = (function(){
 				//	Determine how far we've moved. This to determine how much to rotate by
 				length = direction.length();
 
-				
+
 				//	Then we can rotate the cube based on how far the drag occured
 				object.object3D.rotateOnAxis( axis, -length * api.rotationSpeed );
 
-				
+
 
 
 				//	Reset our internal state
@@ -97,7 +98,7 @@ ERNO.Controls = (function(){
 				else if( state === STATE.INERTIA && length >= 0.0001 ){
 
 					mouse.add( direction );
-				
+
 				} else {
 					state = STATE.NONE
 				}
@@ -106,7 +107,7 @@ ERNO.Controls = (function(){
 
 		}();
 
-	
+
 		/**
 		 *	Define listeners for user initiated events
 		 */
@@ -119,7 +120,7 @@ ERNO.Controls = (function(){
 
 			if( projector.getIntersection( camera, event.pageX, event.pageY ) === null ){
 
-			
+
 				state = STATE.ROTATE;
 
 
@@ -150,7 +151,7 @@ ERNO.Controls = (function(){
 				//	Get the delta between mouse positions
 				direction.subVectors( mouse, lastPosition );
 				lastPosition.copy( mouse );
-			}	
+			}
 
 
 		}
@@ -215,7 +216,7 @@ ERNO.Controls = (function(){
 			}
 		}
 
-		
+
 
 		api.domElement.addEventListener( 'mousedown', mousedown );
 		api.domElement.addEventListener( 'touchstart', touchstart );

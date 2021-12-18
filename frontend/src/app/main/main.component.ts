@@ -155,7 +155,7 @@ export class MainComponent implements OnInit {
   }
 
   getCubeCurrentState() {
-    this.cubeControlService.getCubeCurrentState()
+    this.cubeControlService.getSolution()
   }
 
   private subscriptions() {

@@ -25,6 +25,8 @@ export class IconModule {
     this.matIconRegistry
         .addSvgIcon('leaderboard', this.setPath(`${this.path}/icons/leaderboard_black_24dp.svg`))
         .addSvgIcon('right', this.setPath(`${this.path}/icons/chevron_right_black_24dp.svg`))
+        .addSvgIcon('play', this.setPath(`${this.path}/icons/play_arrow_black_24dp.svg`))
+        .addSvgIcon('pause', this.setPath(`${this.path}/icons/pause_black_24dp.svg`))
         .addSvgIcon('auto_fix_high', this.setPath(`${this.path}/icons/auto_fix_high_black_24dp.svg`))
         .addSvgIcon('cast_connected', this.setPath(`${this.path}/icons/cast_connected_black_24dp.svg`))
         .addSvgIcon('cast', this.setPath(`${this.path}/icons/cast_black_24dp.svg`))

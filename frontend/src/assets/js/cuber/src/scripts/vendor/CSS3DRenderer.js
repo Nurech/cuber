@@ -3,7 +3,7 @@
  * @author mrdoob / http://mrdoob.com/
  * @author mark lundin / http://mark-lundin.com
  *
- *	This is slightly modified CSS Renderer that sets the object transform as individual translate, scale and rotate. 
+ *	This is slightly modified CSS Renderer that sets the object transform as individual translate, scale and rotate.
  * 	The reason for this is that the transformation using matrix3d do not scale correctly under browser zoom.
  */
 
@@ -240,7 +240,7 @@ THREE.CSS3DRenderer = function () {
 		// if( !this.done ){
 		// 	this.done = true;
 
-			var fov = 0.5 / Math.tan( THREE.Math.degToRad( camera.fov * 0.5 ) ) * _height;
+			var fov = 0.4 / Math.tan( THREE.Math.degToRad( camera.fov * 0.4 ) ) * _height;
 
 			domElement.style.WebkitPerspective = fov + "px";
 			domElement.style.MozPerspective = fov + "px";

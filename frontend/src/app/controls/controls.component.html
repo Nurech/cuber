@@ -1,40 +1,47 @@
 <div class="status-container">
-  <mat-icon [svgIcon]="'3d'" class="status-icon" [ngClass]="{'show-status' : is3D,'hide-status' : !is3D}"></mat-icon>
+  <mat-icon [svgIcon]="'3d'" class="status-icon" [ngClass]="{'show-status' : isLocked,'hide-status' : !isLocked}"></mat-icon>
   <mat-icon [svgIcon]="'cast_connected'" class="status-icon"
             [ngClass]="{'show-status' : isCastConnected,'hide-status' : !isCastConnected}"></mat-icon>
 </div>
 
-<div class="mid-slider alternate-theme">
+<div class="mid-slider alternate-theme" [ngClass]="{'show' : solution.length, 'hide' : !solution.length}">
   <mat-slider
     [color]="'accent'"
-    [disabled]="false"
-    [tickInterval]="'auto'"
+    [disabled]="isPlaying"
     thumbLabel
-    [displayWith]="formatLabel"
+    [max]="solutionLength"
+    [value]="atStep"
+    (change)="onSliderChange($event)"
     aria-label="units"></mat-slider>
 </div>
 
-<div class="mid-controls-container alternate-theme" >
-  <button mat-mini-fab  class="control-button" [color]="'primary'" [disabled]="true">
-    <mat-icon [svgIcon]="'first'"></mat-icon>
-  </button>
-  <button mat-mini-fab  class="control-button" color="primary" [disabled]="false">
+<div class="mid-controls-container alternate-theme" [ngClass]="{'show' : solution.length, 'hide' : !solution.length}">
+
+  <button mat-mini-fab class="control-button" color="primary" [disabled]="!previousSteps.length" (click)="onLeft()">
     <mat-icon [svgIcon]="'left'"></mat-icon>
   </button>
-  <button mat-mini-fab  class="control-button" [color]="'primary'" [disabled]="false">
-    <mat-icon [svgIcon]="'last'"></mat-icon>
+
+  <button mat-mini-fab  class="control-button" color="primary" [disabled]="!solution.length" *ngIf="!isPlaying"
+          (click)="onPlay()">
+    <mat-icon [svgIcon]="'play'"></mat-icon>
   </button>
-  <button mat-mini-fab  class="control-button" color="primary" [disabled]="true">
-    <mat-icon [svgIcon]="'last'"></mat-icon>
+  <button mat-mini-fab  class="control-button" color="primary" [disabled]="!solution.length" *ngIf="isPlaying"
+          (click)="onPause()">
+    <mat-icon [svgIcon]="'pause'"></mat-icon>
   </button>
+
+  <button mat-mini-fab  class="control-button" [color]="'primary'" [disabled]="!solution.length" (click)="onRight()">
+    <mat-icon [svgIcon]="'right'"></mat-icon>
+  </button>
+
 </div>
 
 <div class="side-controls-container alternate-theme" >
-  <button mat-mini-fab  class="right-control-button" [color]="'primary'" [disabled]="false">
+  <button mat-mini-fab  class="right-control-button" [color]="'primary'" [disabled]="false" (click)="getSolution()">
     <mat-icon [svgIcon]="'auto_fix_high'"></mat-icon>
   </button>
-  <button mat-mini-fab  class="right-control-button" [color]="'primary'"[disabled]="false"
-          [ngClass]="{'button-active' : is3D}" (click)="onEnable360()">
+  <button mat-mini-fab class="right-control-button" [color]="'primary'" [disabled]="false"
+          [ngClass]="{'button-active' : isLocked}" (click)="changeLocked()">
     <mat-icon [svgIcon]="'360'"></mat-icon>
   </button>
 </div>
