@@ -49,7 +49,7 @@
               <goal>npm</goal>
             </goals>
             <configuration>
-              <arguments>run-script build</arguments>
+              <arguments>run build</arguments>
             </configuration>
             <phase>generate-resources</phase>
           </execution>
