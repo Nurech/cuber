@@ -1,12 +1,3 @@
-.status-container {
-  position: relative;
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  margin: 0.5rem 0;
-  z-index: 1;
-}
-
 .mid-controls-container {
   position: absolute;
   justify-content: center;
@@ -30,20 +21,6 @@
 
 .control-button {
   margin: 5px 5px;
-}
-
-.status-icon {
-  opacity: 0.5;
-  padding: 0 5px;
-  transition: filter 0.3s;
-}
-
-.show-status {
-  filter: blur(0px);
-}
-
-.hide-status {
-  filter: blur(100px);
 }
 
 .right-control-button {

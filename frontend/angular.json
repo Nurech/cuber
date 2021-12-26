@@ -38,9 +38,8 @@
             "styles": [
               "src/styles.css",
               "src/theme.scss",
-              "./node_modules/material-design-icons/iconfont/material-icons.css",
               "src/assets/js/cuber/build/styles/cube.css",
-              "src/assets/js/cuber/examples/basic/styles/base.css",
+              "src/assets/js/cuber/examples/basic/styles/base.css"
             ],
             "scripts": [
               "src/assets/js/cuber/src/scripts/vendor/threejs/src/Three.js",

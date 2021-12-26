@@ -9,8 +9,6 @@ import { MatSliderChange } from '@angular/material/slider';
   styleUrls: ['./controls.component.css']
 })
 export class ControlsComponent implements OnInit {
-  isLocked: boolean = false;
-  isCastConnected: boolean = true;
   subs: Subscription[] = [];
   isPlaying: boolean = false;
   isPaused: boolean = true;
@@ -20,24 +18,21 @@ export class ControlsComponent implements OnInit {
   atStep: number = 0;
   isSolved: boolean = false;
   isStop: boolean = false;
+  isLocked: boolean = true;
 
   constructor(private cubeControlService: CubeControlService) { }
 
   ngOnInit(): void {
-    const isLocked = this.cubeControlService.useLockedControls.subscribe(data => this.isLocked = data);
     const isSolved = this.cubeControlService.isSolved.subscribe(data => this.onSolved(data));
     const twistHappened = this.cubeControlService.twistHappened.subscribe(() => this.shouldFlushSolution());
-    this.subs.push(...[isLocked, isSolved,twistHappened]);
+    this.subs.push(...[isSolved,twistHappened]);
   }
 
   ngOnDestroy() {
     this.subs.forEach(sub => sub.unsubscribe());
   }
 
-  changeLocked() {
-    this.isLocked = !this.isLocked;
-    this.cubeControlService.changeLocked(this.isLocked);
-  }
+
 
   getSolution() {
     this.cubeControlService.cube.isSolving = true;
@@ -151,5 +146,9 @@ export class ControlsComponent implements OnInit {
     //   this.isPlaying = false;
     //   this.isPaused = true;
     // }
+  }
+
+  changeLocked() {
+    //TODO
   }
 }

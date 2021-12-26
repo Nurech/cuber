@@ -16,6 +16,7 @@ import { IconModule } from './shared/icon.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ControlsComponent } from './controls/controls.component';
 import { MatSliderModule } from '@angular/material/slider';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { MatSliderModule } from '@angular/material/slider';
         MatTabsModule,
         IconModule,
         HttpClientModule,
-        MatSliderModule
+        MatSliderModule,
+        FormsModule
     ],
   providers: [],
   bootstrap: [AppComponent]

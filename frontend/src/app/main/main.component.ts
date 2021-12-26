@@ -1,5 +1,7 @@
 import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { CubeControlService } from '../services/cube-control.service';
+import { map } from 'rxjs/operators';
+import { MessageService } from '../services/message.service';
 
 declare var presets: any;
 
@@ -13,8 +15,20 @@ export class MainComponent implements OnInit {
   isSolved = true;
   isHidden = true;
   isLiveSolving = false;
+  userOnTab: number = 0;
 
-  constructor(private cubeControlService: CubeControlService) {
+  title = 'websocket-frontend';
+  input: any;
+  msgs = this.messageService.msgs;
+
+  constructor(private cubeControlService: CubeControlService,
+              private messageService: MessageService) {}
+
+  sendMessage() {
+    if (this.input) {
+      this.messageService.sendMessage(this.input);
+      this.input = '';
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -22,9 +36,11 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cubeControlService.currentCube.subscribe(cube => this.cube = cube)
+    this.cubeControlService.currentCube.subscribe(cube => this.cube = cube);
+    this.cubeControlService.userOnTab.subscribe(index => this.userOnTab = index);
     this.subscriptions();
-    this.cubeControlService.createNewCube()
+    this.cubeControlService.createNewCube();
+
   }
 
   onShuffle() {
@@ -56,11 +72,11 @@ export class MainComponent implements OnInit {
   }
 
   presetHighlightCore() {
-    presets.presetHighlightCore()
+    presets.presetHighlightCore();
   }
 
   ready() {
-    this.cubeControlService.createNewCube()
+    this.cubeControlService.createNewCube();
     this.cube = window.cube;
     this.isSolved = true;
   }
@@ -79,88 +95,88 @@ export class MainComponent implements OnInit {
   }
 
   presetHighlightWhite() {
-    presets.presetHighlightWhite()
+    presets.presetHighlightWhite();
   }
 
   presetDemoStop() {
-    presets.presetDemoStop()
+    presets.presetDemoStop();
   }
 
   presetPurty() {
-    presets.presetPurty()
+    presets.presetPurty();
   }
 
   presetNormal() {
-    presets.presetNormal()
+    presets.presetNormal();
   }
 
   presetHighlightCenters() {
-    presets.presetHighlightCenters()
+    presets.presetHighlightCenters();
   }
 
   presetHighlightEdges() {
-    presets.presetHighlightEdges()
+    presets.presetHighlightEdges();
   }
 
   presetHighlightCorners() {
-    presets.presetHighlightCorners()
+    presets.presetHighlightCorners();
   }
 
   presetLogo() {
-    presets.presetLogo()
+    presets.presetLogo();
   }
 
 
   presetIds() {
-    presets.presetIds()
+    presets.presetIds();
   }
 
   showGray() {
-    presets.showGray()
+    presets.showGray();
   }
 
   paintDifferent() {
-    this.cubeControlService.paintFace(0,0,3)
-    this.cubeControlService.paintFace(1,0,3)
-    this.cubeControlService.paintFace(2,0,3)
+    this.cubeControlService.paintFace(0, 0, 3);
+    this.cubeControlService.paintFace(1, 0, 3);
+    this.cubeControlService.paintFace(2, 0, 3);
 
-    this.cubeControlService.paintFace(18,4,6)
-    this.cubeControlService.paintFace(9,4,6)
-    this.cubeControlService.paintFace(0,4,6)
+    this.cubeControlService.paintFace(18, 4, 6);
+    this.cubeControlService.paintFace(9, 4, 6);
+    this.cubeControlService.paintFace(0, 4, 6);
 
-    this.cubeControlService.paintFace(20,5,1)
-    this.cubeControlService.paintFace(19,5,1)
-    this.cubeControlService.paintFace(18,5,1)
+    this.cubeControlService.paintFace(20, 5, 1);
+    this.cubeControlService.paintFace(19, 5, 1);
+    this.cubeControlService.paintFace(18, 5, 1);
 
-    this.cubeControlService.paintFace(2,2,2)
-    this.cubeControlService.paintFace(11,2,2)
-    this.cubeControlService.paintFace(20,2,2)
+    this.cubeControlService.paintFace(2, 2, 2);
+    this.cubeControlService.paintFace(11, 2, 2);
+    this.cubeControlService.paintFace(20, 2, 2);
   }
 
 
   turnRegular() {
-    this.cubeControlService.turnRegular()
+    this.cubeControlService.turnRegular();
   }
 
   turnGray() {
-    this.cubeControlService.turnGray()
+    this.cubeControlService.turnGray();
   }
 
   tweenToStart() {
-    this.cubeControlService.tweenToStart()
+    this.cubeControlService.tweenToStart();
   }
 
   logCube() {
-    this.cubeControlService.logCube()
+    this.cubeControlService.logCube();
   }
 
   getCubeCurrentState() {
-    this.cubeControlService.getSolution()
+    this.cubeControlService.getSolution();
   }
 
   private subscriptions() {
-    this.cubeControlService.isSolved.subscribe( data => this.isSolved = data )
-    this.cubeControlService.isHidden.subscribe( data => this.isHidden = data )
+    this.cubeControlService.isSolved.subscribe(data => this.isSolved = data);
+    this.cubeControlService.isHidden.subscribe(data => this.isHidden = data);
   }
 }
 

@@ -33,3 +33,9 @@
     </mat-tab>
   </mat-tab-group>
 </div>
+
+<div class="status-container">
+  <mat-icon [svgIcon]="'3d'" class="status-icon" [ngClass]="{'show-status' : isLocked,'hide-status' : !isLocked}"></mat-icon>
+  <mat-icon [svgIcon]="'cast_connected'" class="status-icon"
+            [ngClass]="{'show-status' : isCastConnected,'hide-status' : !isCastConnected}"></mat-icon>
+</div>

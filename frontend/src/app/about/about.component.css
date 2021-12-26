@@ -1,0 +1,6 @@
+.about-text {
+  display: flex;
+  justify-content: center;
+  text-align: justify;
+  padding: 0 2rem;
+}

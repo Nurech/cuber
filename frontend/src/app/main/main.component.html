@@ -2,7 +2,23 @@
 <div class="graybg" [ngClass]="{'show' : !isSolved, 'hide': isSolved}"></div>
 
 <app-nav-bar></app-nav-bar>
-<app-controls></app-controls>
+
+<ng-container>
+  <app-controls></app-controls>
+</ng-container>
+
+<ng-container *ngIf="userOnTab == 3">
+  <app-about style="position: relative;" ></app-about>
+</ng-container>
+
+<input style="   position: absolute;   z-index: 1;" class="form-control" type="text" placeholder="message"
+       [(ngModel)]="input">
+<button style="   position: absolute;   z-index: 1;" class="btn btn-success" (click)="sendMessage()">Send</button>
+<div class="content" style="   position: absolute;   z-index: 1;">
+  <div *ngFor="let msg of msgs">
+    {{msg}}
+  </div>
+</div>
 
 <div class="cube-container" id="container" #cube ></div>
 

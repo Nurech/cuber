@@ -30,8 +30,37 @@
 .tab-container {
   display: flex;
   justify-content: center;
+  position: absolute;
+  z-index: 2;
+  width: 100%;
 }
 
 .mat-tab-body.mat-tab-body-active {
   position: absolute !important;
+}
+
+/*STATUS*/
+
+.status-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin: 0.5rem 0;
+  z-index: 1;
+  top: 3rem;
+}
+
+.show-status {
+  filter: blur(0px);
+}
+
+.hide-status {
+  filter: blur(100px);
+}
+
+.status-icon {
+  opacity: 0.5;
+  padding: 0 5px;
+  transition: filter 0.3s;
 }
