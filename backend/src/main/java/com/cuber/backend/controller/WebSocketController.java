@@ -1,37 +1,21 @@
 package com.cuber.backend.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Component;
+import com.cuber.backend.model.Greeting;
+import com.cuber.backend.model.HelloMessage;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.util.HtmlUtils;
 
-import javax.annotation.PostConstruct;
+@Controller
+public class WebSocketController {
 
-@Component
-public class WebSocketController implements Runnable {
 
-    @Autowired
-    private SimpMessagingTemplate template;
-
-    public void startWebSocket() {
-        new Thread(this).start();
+    @MessageMapping("/testws")
+    @SendTo("/topic/hello")
+    public Greeting greeting(HelloMessage message) throws Exception {
+        Thread.sleep(1000); // simulated delay
+        return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
     }
 
-    @PostConstruct
-    public void postConstruct() {
-        System.out.println("Start websocket");
-        startWebSocket();
-    }
-
-    @Override
-    public void run() {
-        int data = 10;
-        while (true) {
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            template.convertAndSend("/topic/hello", data);
-        }
-    }
 }
