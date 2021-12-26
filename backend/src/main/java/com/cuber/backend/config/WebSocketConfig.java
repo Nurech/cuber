@@ -10,18 +10,15 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/topic");
-        config.setApplicationDestinationPrefixes("/gkz");
+        config.setApplicationDestinationPrefixes("/test");
+
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry
-                .addEndpoint("/gkz-stomp-endpoint")
-                .setAllowedOrigins("http://localhost:4200")
-                .withSockJS();
+        registry.addEndpoint("/testws").setAllowedOrigins("*");
     }
 }

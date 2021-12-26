@@ -12,18 +12,18 @@
 </ng-container>
 
 <div style="position: relative;
-    margin: 43px 0 0 0; z-index: 2">
-  <button id="connect" class="btn btn-default" type="button"  (click)="connect()">Connect</button>
-  <button id="disconnect" class="btn btn-default" type="submit" (click)="disconnect()">Disconnect</button>
-
-  <br>
-  <br>
-  <input type="text" id="name" name="name" class="form-control" #input />
-  <br>
-  <button id="send" class="btn btn-default" type="button" (click)="sendName(input.value)">Send</button>
-  <br>
-  <div *ngFor="let greeting of greetings">
-    {{greeting}}
+    margin: 43px 0 0 0; z-index: 2; font-family: Arial,serif">
+  <div id="messages">
+    <button class="btn btn-primary" (click)="onSendMessage()">
+      Send Message
+    </button>
+    <div>Received messages</div>
+    <ol>
+      <!-- we will use Angular binding to populate list of messages -->
+      <li class="message" *ngFor="let message of receivedMessages">
+{{message}}
+      </li>
+    </ol>
   </div>
 </div>
 

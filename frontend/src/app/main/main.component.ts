@@ -1,7 +1,7 @@
 import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { CubeControlService } from '../services/cube-control.service';
-import { map } from 'rxjs/operators';
-import { MessageService } from '../services/message.service';
+import { RxStompService } from '@stomp/ng2-stompjs';
+import { Message } from '@stomp/stompjs';
 
 declare var presets: any;
 
@@ -16,15 +16,20 @@ export class MainComponent implements OnInit {
   isHidden = true;
   isLiveSolving = false;
   userOnTab: number = 0;
-  greetings: string[] = []
+  public receivedMessages: string[] = [];
 
 
   constructor(private cubeControlService: CubeControlService,
-              private messageService: MessageService) {}
+              private rxStompService: RxStompService) {}
 
 
   ngOnChanges(changes: SimpleChanges) {
     console.log(changes);
+  }
+
+  onSendMessage() {
+    const message = `Message generated at ${new Date}`;
+    this.rxStompService.publish({destination: '/topic/hello', body: message});
   }
 
   ngOnInit(): void {
@@ -32,7 +37,11 @@ export class MainComponent implements OnInit {
     this.cubeControlService.userOnTab.subscribe(index => this.userOnTab = index);
     this.subscriptions();
     this.cubeControlService.createNewCube();
-    this.messageService.greetings.subscribe((data) => this.greetings = data)
+    // this.messageService.greetings.subscribe((data) => this.greetings = data)
+
+    this.rxStompService.watch('/topic/hello').subscribe((message: Message) => {
+      this.receivedMessages.push(message.body);
+    });
 
   }
 
@@ -172,17 +181,17 @@ export class MainComponent implements OnInit {
     this.cubeControlService.isHidden.subscribe(data => this.isHidden = data);
   }
 
-  connect() {
-    this.messageService.connect()
-  }
-
-  disconnect() {
-    this.messageService.disconnect()
-  }
-
-  sendName(value: string) {
-    this.messageService.sendName(value)
-
-  }
+  // connect() {
+  //   this.messageService.connect()
+  // }
+  //
+  // disconnect() {
+  //   this.messageService.disconnect()
+  // }
+  //
+  // sendName(value: string) {
+  //   this.messageService.sendName(value)
+  //
+  // }
 }
 

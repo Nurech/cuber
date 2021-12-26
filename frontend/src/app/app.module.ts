@@ -17,6 +17,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { ControlsComponent } from './controls/controls.component';
 import { MatSliderModule } from '@angular/material/slider';
 import { FormsModule } from '@angular/forms';
+import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
+import { myRxStompConfig } from './my-rx-stomp.config';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,15 @@ import { FormsModule } from '@angular/forms';
         MatSliderModule,
         FormsModule
     ],
-  providers: [],
+  providers: [{
+    provide: InjectableRxStompConfig,
+    useValue: myRxStompConfig,
+  },
+    {
+      provide: RxStompService,
+      useFactory: rxStompServiceFactory,
+      deps: [InjectableRxStompConfig],
+    },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
