@@ -1,35 +1,66 @@
 import { Injectable } from '@angular/core';
 import * as SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MessageService {
+  title = 'grokonez';
+  description = 'Angular-WebSocket Demo';
 
-  constructor() {
-    this.initializeWebSocketConnection();
+  greetings = new BehaviorSubject<string[]>([]);
+  disabled = true;
+  private stompClient: any;
+  private greetingsStrings: string[] = []
+
+  constructor() { }
+
+  setConnected(connected: boolean) {
+    this.disabled = !connected;
+
+    if (connected) {
+      this.greetings.next([])
+    }
   }
 
-  public stompClient: any;
-  public msgs: any[] = [];
+  connect() {
+    const socket = new SockJS('http://localhost:8080/gkz-stomp-endpoint');
+    this.stompClient = Stomp.over(socket);
 
-  initializeWebSocketConnection() {
-    const serverUrl = 'http://localhost:8080/socket';
-    const ws = new SockJS(serverUrl);
-    this.stompClient = Stomp.over(ws);
-    const that = this;
-    this.stompClient.connect({}, () => {
-      that.stompClient.subscribe('/message', (message: { body: any; }) => {
-        if (message.body) {
-          that.msgs.push(message.body);
-        }
+    const _this = this;
+    this.stompClient.connect({}, function (frame: string) {
+      _this.setConnected(true);
+      console.log('Connected: ' + frame);
+
+      _this.stompClient.subscribe('/topic/hi', function (hello: { body: string; }) {
+        _this.showGreeting(JSON.parse(hello.body).greeting);
       });
     });
   }
 
-  sendMessage(message: any) {
-    this.stompClient.send('/app/send/message', {}, message);
+  disconnect() {
+    if (this.stompClient != null) {
+      this.stompClient.disconnect();
+    }
+
+    this.setConnected(false);
+    console.log('Disconnected!');
   }
 
+  sendName(name: string) {
+    if (this.stompClient != null) {
+      this.stompClient.send(
+        '/gkz/hello',
+        {},
+        JSON.stringify({'name': name})
+      );
+    }
+  }
+
+  showGreeting(message: string) {
+    this.greetingsStrings.push(message)
+    this.greetings.next(this.greetingsStrings);
+  }
 }

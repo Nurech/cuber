@@ -11,12 +11,19 @@
   <app-about style="position: relative;" ></app-about>
 </ng-container>
 
-<input style="   position: absolute;   z-index: 1;" class="form-control" type="text" placeholder="message"
-       [(ngModel)]="input">
-<button style="   position: absolute;   z-index: 1;" class="btn btn-success" (click)="sendMessage()">Send</button>
-<div class="content" style="   position: absolute;   z-index: 1;">
-  <div *ngFor="let msg of msgs">
-    {{msg}}
+<div style="position: relative;
+    margin: 43px 0 0 0;">
+  <button id="connect" class="btn btn-default" type="button"  (click)="connect()">Connect</button>
+  <button id="disconnect" class="btn btn-default" type="submit" (click)="disconnect()">Disconnect</button>
+
+  <br>
+  <br>
+  <input type="text" id="name" name="name" class="form-control" #input />
+  <br>
+  <button id="send" class="btn btn-default" type="button" (click)="sendName(input.value)">Send</button>
+  <br>
+  <div *ngFor="let greeting of greetings">
+    {{greeting}}
   </div>
 </div>
 

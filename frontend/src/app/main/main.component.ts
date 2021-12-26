@@ -16,20 +16,12 @@ export class MainComponent implements OnInit {
   isHidden = true;
   isLiveSolving = false;
   userOnTab: number = 0;
+  greetings: string[] = []
 
-  title = 'websocket-frontend';
-  input: any;
-  msgs = this.messageService.msgs;
 
   constructor(private cubeControlService: CubeControlService,
               private messageService: MessageService) {}
 
-  sendMessage() {
-    if (this.input) {
-      this.messageService.sendMessage(this.input);
-      this.input = '';
-    }
-  }
 
   ngOnChanges(changes: SimpleChanges) {
     console.log(changes);
@@ -40,6 +32,7 @@ export class MainComponent implements OnInit {
     this.cubeControlService.userOnTab.subscribe(index => this.userOnTab = index);
     this.subscriptions();
     this.cubeControlService.createNewCube();
+    this.messageService.greetings.subscribe((data) => this.greetings = data)
 
   }
 
@@ -177,6 +170,19 @@ export class MainComponent implements OnInit {
   private subscriptions() {
     this.cubeControlService.isSolved.subscribe(data => this.isSolved = data);
     this.cubeControlService.isHidden.subscribe(data => this.isHidden = data);
+  }
+
+  connect() {
+    this.messageService.connect()
+  }
+
+  disconnect() {
+    this.messageService.disconnect()
+  }
+
+  sendName(value: string) {
+    this.messageService.sendName(value)
+
   }
 }
 
