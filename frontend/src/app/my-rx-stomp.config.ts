@@ -3,7 +3,7 @@ import { environment } from '../environments/environment';
 
 export const myRxStompConfig: InjectableRxStompConfig = {
   // Which server?
-  brokerURL: 'wss:'+environment.baseUrl+'testws',
+  brokerURL: 'ws:'+environment.baseUrl+'testws',
 
   // Headers
   // Typical keys: login, passcode, host
