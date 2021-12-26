@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  baseUrl: 'cuber-app.herokuapp.com:8080/'
+  baseUrl: 'localhost:8080/',
+  protocol: 'wss:',
 };
