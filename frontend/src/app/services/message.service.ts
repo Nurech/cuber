@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import { BehaviorSubject } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class MessageService {
   greetings = new BehaviorSubject<string[]>([]);
   disabled = true;
   private stompClient: any;
-  private greetingsStrings: string[] = []
+  private greetingsStrings: string[] = [];
 
   constructor() { }
 
@@ -21,21 +22,20 @@ export class MessageService {
     this.disabled = !connected;
 
     if (connected) {
-      this.greetings.next([])
+      this.greetings.next([]);
     }
   }
 
   connect() {
-    const socket = new SockJS('http://localhost:8080/gkz-stomp-endpoint');
+    const socket = new SockJS(environment.baseUrl + '/gkz-stomp-endpoint');
     this.stompClient = Stomp.over(socket);
 
-    const _this = this;
-    this.stompClient.connect({}, function (frame: string) {
-      _this.setConnected(true);
+    this.stompClient.connect({}, (frame: string) => {
+      this.setConnected(true);
       console.log('Connected: ' + frame);
 
-      _this.stompClient.subscribe('/topic/hi', function (hello: { body: string; }) {
-        _this.showGreeting(JSON.parse(hello.body).greeting);
+      this.stompClient.subscribe('/topic/hi', (hello: { body: string; }) => {
+        this.showGreeting(JSON.parse(hello.body).greeting);
       });
     });
   }
@@ -60,7 +60,7 @@ export class MessageService {
   }
 
   showGreeting(message: string) {
-    this.greetingsStrings.push(message)
+    this.greetingsStrings.push(message);
     this.greetings.next(this.greetingsStrings);
   }
 }

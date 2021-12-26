@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  baseUrl: 'https://https://cuber-app.herokuapp.com/'
+  baseUrl: 'https://cuber-app.herokuapp.com/:8080'
 };
