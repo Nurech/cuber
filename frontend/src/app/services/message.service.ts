@@ -27,6 +27,7 @@ export class MessageService {
   }
 
   connect() {
+    console.log(environment.baseUrl)
     const socket = new SockJS(environment.baseUrl + '/gkz-stomp-endpoint');
     this.stompClient = Stomp.over(socket);
 
