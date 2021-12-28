@@ -28,8 +28,10 @@ export class MainComponent implements OnInit {
   }
 
   onSendMessage() {
-    const message = `Message generated at ${new Date}`;
-    this.rxStompService.publish({destination: '/topic/hello', body: message});
+    const message = this.cubeControlService.getCurrentStateString();
+    console.log(message);
+    this.rxStompService.publish({destination: '/app/solution', body: message});
+
   }
 
   ngOnInit(): void {
@@ -39,10 +41,10 @@ export class MainComponent implements OnInit {
     this.cubeControlService.createNewCube();
     // this.messageService.greetings.subscribe((data) => this.greetings = data)
 
-    this.rxStompService.watch('/topic/hello').subscribe((message: Message) => {
+    this.rxStompService.watch('/topic/messages').subscribe((message: Message) => {
+      console.log(message);
       this.receivedMessages.push(message.body);
     });
-
   }
 
   onShuffle() {

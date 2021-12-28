@@ -118,7 +118,7 @@ export class CubeControlService {
 
   constructor(private lockControlsService: LockControlsService) {
     this.q.autoRun = true;
-    this.startCubeSolver();
+    // this.startCubeSolver();
   }
 
 
@@ -443,6 +443,39 @@ export class CubeControlService {
   logCube() {
     console.log(window);
     console.log(window.cube);
+  }
+
+  getCurrentStateString(): string {
+
+    let up: string[] = [];
+    let right: string[] = [];
+    let front: string[] = [];
+    let down: string[] = [];
+    let left: string[] = [];
+    let back: string[] = [];
+
+    for (let [k1, v1] of Object.entries(this.FACES_IDS)) {
+      for (let cubeletId of v1) {
+        for (let [k2, v2] of Object.entries(this.originalColorFace)) {
+          if (k2 == this.cube.cubelets[cubeletId][k1].color.name) {
+            if (k1 == 'up') up.push(v2);
+            if (k1 == 'right') right.push(v2);
+            if (k1 == 'front') front.push(v2);
+            if (k1 == 'down') down.push(v2);
+            if (k1 == 'left') left.push(v2);
+            if (k1 == 'back') back.push(v2);
+          }
+        }
+      }
+    }
+
+    let currentState: string = up.join('') + right.join('') + front.join('') + down.join('') + left.join('') + back.join('');
+    if (this.validateCubeState(currentState)) {
+      return currentState;
+    } else {
+      console.warn('an invalid cube was passed, ignoring....');
+      return '';
+    }
   }
 
   getSolution() {

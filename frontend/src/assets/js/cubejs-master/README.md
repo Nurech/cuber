@@ -10,7 +10,7 @@ cube very fast in 22 moves or less.
 
 **cube.js** is written in [CoffeeScript](http://coffeescript.org/), and runs on [node.js](http://nodejs.org/) and modern browsers.
 
-A full-fledged random state scrambler demo is available [here](http://ldez.github.io/cubejs/).
+A full-fledged random state scrambler Solve is available [here](http://ldez.github.io/cubejs/).
 
 ## Examples
 

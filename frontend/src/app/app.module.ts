@@ -43,15 +43,17 @@ import { myRxStompConfig } from './my-rx-stomp.config';
         MatSliderModule,
         FormsModule
     ],
-  providers: [{
-    provide: InjectableRxStompConfig,
-    useValue: myRxStompConfig,
-  },
+  providers: [
+    {
+      provide: InjectableRxStompConfig,
+      useValue: myRxStompConfig,
+    },
     {
       provide: RxStompService,
       useFactory: rxStompServiceFactory,
       deps: [InjectableRxStompConfig],
-    },],
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
