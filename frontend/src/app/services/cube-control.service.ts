@@ -4,7 +4,6 @@ import { Cubelet, Direction } from '../shared/models/cube-model';
 import { NgDebounce } from '../shared/decorators/debounce.decorator';
 import { LockControlsService } from './lock-controls.service';
 
-const Cube = require('cubejs');
 declare var TWEEN: any;
 const Queue = require('js-queue');
 
@@ -118,7 +117,6 @@ export class CubeControlService {
 
   constructor(private lockControlsService: LockControlsService) {
     this.q.autoRun = true;
-    // this.startCubeSolver();
   }
 
 
@@ -474,66 +472,32 @@ export class CubeControlService {
       return currentState;
     } else {
       console.warn('an invalid cube was passed, ignoring....');
+      this.turnRegular();
       return '';
     }
   }
 
-  getSolution() {
 
-    let up: string[] = [];
-    let right: string[] = [];
-    let front: string[] = [];
-    let down: string[] = [];
-    let left: string[] = [];
-    let back: string[] = [];
-
-    for (let [k1, v1] of Object.entries(this.FACES_IDS)) {
-      for (let cubeletId of v1) {
-        for (let [k2, v2] of Object.entries(this.originalColorFace)) {
-          if (k2 == this.cube.cubelets[cubeletId][k1].color.name) {
-            if (k1 == 'up') up.push(v2);
-            if (k1 == 'right') right.push(v2);
-            if (k1 == 'front') front.push(v2);
-            if (k1 == 'down') down.push(v2);
-            if (k1 == 'left') left.push(v2);
-            if (k1 == 'back') back.push(v2);
-          }
-        }
-      }
-    }
-
-    let currentState: string = up.join('') + right.join('') + front.join('') + down.join('') + left.join('') + back.join('');
-    console.log(currentState);
-    if (this.validateCubeState(currentState)) {
-      let solution = this.useSolver(currentState);
-      console.log(solution);
-      return solution;
-    } else {
-      console.warn('an invalid cube was passed, ignoring....');
-      this.turnRegular();
-      return [];
-    }
-  }
-
-  // Solved cube state is UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB
-  // U means a facelet of the up face color, R means a facelet of the right face color, etc.
-
-  // Lets use cube.js to solve our cuber for us
-  useSolver(faceArray: string) {
-    let solvedCube = Cube.fromString(faceArray).solve();
+  /**
+   * This translates min2cube solution from backend to cuber twist commands
+   */
+  getSolutionMoves(solvedCube: string) {
+    console.warn(solvedCube)
     let solutionArray = solvedCube.split(' ');
     let returnArray = [];
     for (let char of solutionArray) {
-      if (char.includes('2')) {
-        char = char.replace('2', '');
-        returnArray.push(char);
-      }
-      if (char.includes('\'')) {
-        char = char.replace('\'', '');
-        char = char.toLowerCase();
-        returnArray.push(char);
-      } else {
-        returnArray.push(char);
+      if (char !=  '') {
+        if (char.includes('2')) {
+          char = char.replace('2', '');
+          returnArray.push(char);
+        }
+        if (char.includes('\'')) {
+          char = char.replace('\'', '');
+          char = char.toLowerCase();
+          returnArray.push(char);
+        } else {
+          returnArray.push(char);
+        }
       }
     }
     console.log(returnArray);
@@ -552,19 +516,6 @@ export class CubeControlService {
       }
     }
     return true; // so I guess it is valid
-  }
-
-  async startCubeSolver() {
-    Cube.initSolver();
-    if (typeof Worker !== 'undefined') {
-      const worker = new Worker('../app.worker',
-        {type: 'module'});
-
-      worker.onmessage = ({data}) => {
-        console.log(`page got message: ${data}`);
-      };
-      worker.postMessage('hello');
-    }
   }
 
   private playIntro() {

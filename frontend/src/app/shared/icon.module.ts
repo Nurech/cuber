@@ -39,6 +39,7 @@ export class IconModule {
         .addSvgIcon('tap_and_play', this.setPath(`${this.path}/icons/tap_and_play_black_24dp.svg`))
         .addSvgIcon('info', this.setPath(`${this.path}/icons/info_black_24dp.svg`))
         .addSvgIcon('videogame', this.setPath(`${this.path}/icons/videogame_asset_black_24dp.svg`))
+        .addSvgIcon('close', this.setPath(`${this.path}/icons/close_black_24dp.svg`))
         .addSvgIcon('live_tv', this.setPath(`${this.path}/icons/live_tv_black_24dp.svg`));
   }
 

@@ -1,37 +1,57 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { CubeControlService } from '../services/cube-control.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { RxStompService } from '@stomp/ng2-stompjs';
 
 @Component({
-  selector: 'app-nav-bar',
-  templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.css']
+    selector: 'app-nav-bar',
+    templateUrl: './nav-bar.component.html',
+    styleUrls: ['./nav-bar.component.css']
 })
 export class NavBarComponent implements OnInit, OnDestroy {
-  isLiveSolving = true;
-  isLocked: boolean = false;
-  isCastConnected: boolean = true;
-  private subs: Subscription[] = [];
+    public isLiveSolving = true;
+    public isLocked: boolean = false;
+    public isCastConnected: boolean = true;
+    private subs: Subscription[] = [];
+    public robotConnection: boolean = false;
+    public backendConnection$: Observable<any> | undefined;
 
-  constructor(private cubeControlService: CubeControlService) { }
+    constructor(private cubeControlService: CubeControlService,
+                public rxStompService: RxStompService) { }
 
-  ngOnDestroy() {
-    this.subs.forEach(sub => sub.unsubscribe());
-  }
+    ngOnDestroy() {
+        this.subs.forEach(sub => sub.unsubscribe());
+    }
 
-  ngOnInit(): void {
-    const isLocked = this.cubeControlService.useLockedControls.subscribe(data => this.isLocked = data);
-    this.subs.push(...[isLocked]);
-  }
+    ngOnInit(): void {
+      const isLocked = this.cubeControlService.useLockedControls.subscribe(data => this.isLocked = data);
+      this.subs.push(...[isLocked]);
 
-  onTabChange(event: MatTabChangeEvent) {
-    console.log(event)
-    this.cubeControlService.userOnTab.next(event.index)
-  }
+      this.backendConnection$ = this.rxStompService.connectionState$.pipe(
+            map(state => {
+              console.log(state)
+                // convert numeric RxStompState to string
+                return RxStompState[state];
+            })
+        );
+    }
 
-  changeLocked() {
-    this.isLocked = !this.isLocked;
-    this.cubeControlService.changeLocked(this.isLocked);
-  }
+    onTabChange(event: MatTabChangeEvent) {
+        console.log(event);
+        this.cubeControlService.userOnTab.next(event.index);
+    }
+
+    changeLocked() {
+        this.isLocked = !this.isLocked;
+        this.cubeControlService.changeLocked(this.isLocked);
+    }
+}
+
+export enum RxStompState {
+  CONNECTING,
+  OPEN,
+  CLOSING,
+  CLOSED,
 }

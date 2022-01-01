@@ -34,8 +34,31 @@
   </mat-tab-group>
 </div>
 
-<div class="status-container">
-  <mat-icon [svgIcon]="'3d'" class="status-icon" [ngClass]="{'show-status' : isLocked,'hide-status' : !isLocked}"></mat-icon>
-  <mat-icon [svgIcon]="'cast_connected'" class="status-icon"
-            [ngClass]="{'show-status' : isCastConnected,'hide-status' : !isCastConnected}"></mat-icon>
+<div class="status-container alternate-theme">
+  <div class="left-container alternate-theme">
+    <div class="row">
+      Server status<ng-container *ngIf="(backendConnection$|async) != 'OPEN'; else connected"><ng-container
+      *ngTemplateOutlet="noConnection"></ng-container></ng-container>
+    </div>
+    <div class="row">
+      Robot status<ng-container *ngIf="!robotConnection; else connected"> <ng-container *ngTemplateOutlet="noConnection"></ng-container></ng-container>
+    </div>
+  </div>
+  <div class="right-container">
+    <mat-icon [svgIcon]="'3d'" class="status-icon"
+              [ngClass]="{'show-status' : isLocked,'hide-status' : !isLocked}"></mat-icon>
+    <mat-icon [svgIcon]="'cast_connected'" class="status-icon"
+              [ngClass]="{'show-status' : isCastConnected,'hide-status' : !isCastConnected}"></mat-icon>
+  </div>
 </div>
+<br>
+<br>
+<br>
+
+<ng-template #noConnection>
+  <mat-icon [svgIcon]="'close'" [color]="'warn'" style="animation: rotate-back-forth 5s infinite;"></mat-icon>
+</ng-template>
+
+<ng-template #connected>
+  &nbsp;<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
+</ng-template>

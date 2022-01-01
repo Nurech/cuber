@@ -1,7 +1,5 @@
-import { Component, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CubeControlService } from '../services/cube-control.service';
-import { RxStompService } from '@stomp/ng2-stompjs';
-import { Message } from '@stomp/stompjs';
 
 declare var presets: any;
 
@@ -12,39 +10,19 @@ declare var presets: any;
 })
 export class MainComponent implements OnInit {
   private cube: any;
-  isSolved = true;
-  isHidden = true;
-  isLiveSolving = false;
-  userOnTab: number = 0;
+  public isSolved = true;
+  public isHidden = true;
+  public isLiveSolving = false;
+  public userOnTab: number = 0;
   public receivedMessages: string[] = [];
 
 
-  constructor(private cubeControlService: CubeControlService,
-              private rxStompService: RxStompService) {}
+  constructor(private cubeControlService: CubeControlService) {}
 
-
-  ngOnChanges(changes: SimpleChanges) {
-    console.log(changes);
-  }
-
-  onSendMessage() {
-    const message = this.cubeControlService.getCurrentStateString();
-    console.log(message);
-    this.rxStompService.publish({destination: '/app/solution', body: message});
-
-  }
 
   ngOnInit(): void {
-    this.cubeControlService.currentCube.subscribe(cube => this.cube = cube);
-    this.cubeControlService.userOnTab.subscribe(index => this.userOnTab = index);
     this.subscriptions();
     this.cubeControlService.createNewCube();
-    // this.messageService.greetings.subscribe((data) => this.greetings = data)
-
-    this.rxStompService.watch('/topic/messages').subscribe((message: Message) => {
-      console.log(message);
-      this.receivedMessages.push(message.body);
-    });
   }
 
   onShuffle() {
@@ -77,12 +55,6 @@ export class MainComponent implements OnInit {
 
   presetHighlightCore() {
     presets.presetHighlightCore();
-  }
-
-  ready() {
-    this.cubeControlService.createNewCube();
-    this.cube = window.cube;
-    this.isSolved = true;
   }
 
 
@@ -158,42 +130,11 @@ export class MainComponent implements OnInit {
   }
 
 
-  turnRegular() {
-    this.cubeControlService.turnRegular();
-  }
-
-  turnGray() {
-    this.cubeControlService.turnGray();
-  }
-
-  tweenToStart() {
-    this.cubeControlService.tweenToStart();
-  }
-
-  logCube() {
-    this.cubeControlService.logCube();
-  }
-
-  getCubeCurrentState() {
-    this.cubeControlService.getSolution();
-  }
-
   private subscriptions() {
     this.cubeControlService.isSolved.subscribe(data => this.isSolved = data);
     this.cubeControlService.isHidden.subscribe(data => this.isHidden = data);
+    this.cubeControlService.currentCube.subscribe(cube => this.cube = cube);
+    this.cubeControlService.userOnTab.subscribe(index => this.userOnTab = index);
   }
-
-  // connect() {
-  //   this.messageService.connect()
-  // }
-  //
-  // disconnect() {
-  //   this.messageService.disconnect()
-  // }
-  //
-  // sendName(value: string) {
-  //   this.messageService.sendName(value)
-  //
-  // }
 }
 

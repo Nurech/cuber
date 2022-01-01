@@ -15,7 +15,7 @@ public class WebSocketController {
 
 
     @MessageMapping("/solution")
-    @SendTo("/topic/messages")
+    @SendTo("/topic/solutions")
     public String send(String message) throws Exception {
         logger.info(String.valueOf(message));
         String solution = Solver.simpleSolve(message);

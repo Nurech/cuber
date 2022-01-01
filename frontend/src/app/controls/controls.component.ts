@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CubeControlService } from '../services/cube-control.service';
 import { Subscription } from 'rxjs';
 import { MatSliderChange } from '@angular/material/slider';
+import { Message } from '@stomp/stompjs';
+import { RxStompService } from '@stomp/ng2-stompjs';
 
 @Component({
   selector: 'app-controls',
@@ -20,26 +22,33 @@ export class ControlsComponent implements OnInit {
   isStop: boolean = false;
   isLocked: boolean = true;
 
-  constructor(private cubeControlService: CubeControlService) { }
+  constructor(private cubeControlService: CubeControlService,
+              private rxStompService: RxStompService) { }
 
   ngOnInit(): void {
     const isSolved = this.cubeControlService.isSolved.subscribe(data => this.onSolved(data));
     const twistHappened = this.cubeControlService.twistHappened.subscribe(() => this.shouldFlushSolution());
-    this.subs.push(...[isSolved,twistHappened]);
+
+    this.rxStompService.watch('/topic/solutions').subscribe((message: Message) => {
+      this.useSolution(message.body);
+    });
+
+    this.subs.push(...[isSolved, twistHappened]);
   }
 
   ngOnDestroy() {
     this.subs.forEach(sub => sub.unsubscribe());
   }
 
-
-
   getSolution() {
+    const message = this.cubeControlService.getCurrentStateString();
+    this.rxStompService.publish({destination: '/app/solution', body: message});
     this.cubeControlService.cube.isSolving = true;
-    this.solution = [...this.cubeControlService.getSolution()];
-    console.log(this.solution);
+  }
+
+  useSolution(body: string) {
+    this.solution = [...this.cubeControlService.getSolutionMoves(body)];
     this.solutionLength = this.solution.length;
-    console.log(this.solutionLength);
     this.previousSteps = [];
     this.atStep = 0;
     this.changeThumbLabel();
@@ -51,12 +60,12 @@ export class ControlsComponent implements OnInit {
       this.cubeControlService.cube.undo();
       this.solution.unshift(step);
       this.atStep -= 1;
-      this.changeThumbLabel()
+      this.changeThumbLabel();
     } else {
       setTimeout(() => {
         this.atStep = 0;
         this.isPlaying = false;
-      },100)
+      }, 100);
     }
   }
 
@@ -87,12 +96,12 @@ export class ControlsComponent implements OnInit {
       this.cubeControlService.cube.twist(step);
       this.previousSteps.push(step);
       this.atStep += 1;
-      this.changeThumbLabel()
+      this.changeThumbLabel();
       if (!this.solution.length) {
         setTimeout(() => {
           this.atStep = 0;
           this.isPlaying = false;
-        },100)
+        }, 100);
       }
     }
   }
@@ -129,16 +138,14 @@ export class ControlsComponent implements OnInit {
   /**
    * Because displayWith format call back goes nuts when template change is triggered, we resort to this
    */
-
   changeThumbLabel() {
     let thumbLabel = document.getElementsByClassName('mat-slider-thumb-label-text').item(0);
-    console.info(thumbLabel)
     if (!thumbLabel) return;
-    thumbLabel.innerHTML = this.atStep + '/'+ this.solutionLength
+    thumbLabel.innerHTML = this.atStep + '/' + this.solutionLength;
   }
 
   /**
-   * When user makes a twist during solve we should probably flush the old solution because it's not valid anymore
+   * When user makes a twist during solve we should flush the old solution because it's not valid anymore
    */
   private shouldFlushSolution() {
     // if (    this.cubeControlService.cube.isSolving ) {

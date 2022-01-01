@@ -11,21 +11,5 @@
   <app-about style="position: relative;" ></app-about>
 </ng-container>
 
-<div style="position: relative;
-    margin: 43px 0 0 0; z-index: 2; font-family: Arial,serif">
-  <div id="messages">
-    <button class="btn btn-primary" (click)="onSendMessage()">
-      Send Message
-    </button>
-    <div>Received messages</div>
-    <ol>
-      <!-- we will use Angular binding to populate list of messages -->
-      <li class="message" *ngFor="let message of receivedMessages">
-{{message}}
-      </li>
-    </ol>
-  </div>
-</div>
-
 <div class="cube-container" id="container" #cube ></div>
 
