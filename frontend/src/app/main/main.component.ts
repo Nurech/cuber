@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CubeControlService } from '../services/cube-control.service';
+const { version: appVersion } = require('../../../package.json')
 
 declare var presets: any;
 
@@ -13,12 +14,13 @@ export class MainComponent implements OnInit {
   public isSolved = true;
   public isHidden = true;
   public isLiveSolving = false;
-  public userOnTab: number = 0;
+  public userOnTab: string = '';
   public receivedMessages: string[] = [];
+  public appVersion: string;
 
-
-  constructor(private cubeControlService: CubeControlService) {}
-
+  constructor(private cubeControlService: CubeControlService) {
+    this.appVersion = appVersion
+  }
 
   ngOnInit(): void {
     this.subscriptions();
@@ -129,12 +131,11 @@ export class MainComponent implements OnInit {
     this.cubeControlService.paintFace(20, 2, 2);
   }
 
-
   private subscriptions() {
     this.cubeControlService.isSolved.subscribe(data => this.isSolved = data);
     this.cubeControlService.isHidden.subscribe(data => this.isHidden = data);
     this.cubeControlService.currentCube.subscribe(cube => this.cube = cube);
-    this.cubeControlService.userOnTab.subscribe(index => this.userOnTab = index);
+    this.cubeControlService.userOnTab.subscribe(change => this.userOnTab = change.tab.textLabel);
   }
 }
 

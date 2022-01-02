@@ -1,13 +1,11 @@
 <div class="greenbg" [ngClass]="{'show' : isSolved, 'hide': !isSolved}"></div>
 <div class="graybg" [ngClass]="{'show' : !isSolved, 'hide': isSolved}"></div>
-
+<div class="version-text">v{{appVersion}}</div>
 <app-nav-bar></app-nav-bar>
 
-<ng-container>
   <app-controls></app-controls>
-</ng-container>
 
-<ng-container *ngIf="userOnTab == 3">
+<ng-container *ngIf="userOnTab == 'about'">
   <app-about style="position: relative;" ></app-about>
 </ng-container>
 

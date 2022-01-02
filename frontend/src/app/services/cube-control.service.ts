@@ -3,6 +3,7 @@ import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
 import { Cubelet, Direction } from '../shared/models/cube-model';
 import { NgDebounce } from '../shared/decorators/debounce.decorator';
 import { LockControlsService } from './lock-controls.service';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 declare var TWEEN: any;
 const Queue = require('js-queue');
@@ -36,7 +37,7 @@ export class CubeControlService {
   isSolved = new BehaviorSubject<boolean>(true);
   isHidden = new BehaviorSubject<boolean>(true);
   twistHappened = new Subject<any>();
-  userOnTab = new BehaviorSubject<number>(0);
+  userOnTab = new ReplaySubject<MatTabChangeEvent>();
   currentCube = new ReplaySubject<any>(1);
 
 

@@ -19,7 +19,7 @@
   position: relative;
   font-family: Cuber, serif;
   text-align: center;
-  padding: 1% 3% 3% 3%;
+  padding: 1% 3% 1% 3%;
   font-size: 3vw;
 }
 
@@ -71,7 +71,7 @@
   stroke-dashoffset: 34; /* ORIGINALLY 166px */
   stroke-width: 2;
   stroke-miterlimit: 10;
-  stroke: #7ac142;
+  stroke: #1a1a1a;
   fill: none;
   animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
 }
@@ -85,7 +85,7 @@
   stroke: #fff;
   stroke-miterlimit: 10;
   /*margin: 10% auto;*/
-  box-shadow: inset 0 0 0 #7ac142;
+  box-shadow: inset 0 0 0 #1a1a1a;
   animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
 }
 
@@ -113,16 +113,27 @@
 
 @keyframes fill {
   100% {
-    box-shadow: inset 0 0 0 80px #7ac142;
+    box-shadow: inset 0 0 0 80px #1a1a1a;
   }
 }
 
 .right-container {
+  flex: 1 1 0;
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+
+.middle-container {
+  flex: 1 1 0;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .left-container {
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
   font-family: SANS-SERIF, serif;
@@ -133,10 +144,22 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding: 0 1%
 }
 
-@keyframes rotate-back-forth {
-  50% {
-    transform: rotate(180deg);
-  }
+.group-icon {
+  width: 30px;
+  height: 30px;
+  margin: 4px 0 0 0;
+}
+
+.col-header {
+  background: #3d81f6;
+  width: max-content;
+  padding: 0 6px;
+  height: max-content;
+  font-size: 10px;
+  font-family: monospace;
+  margin: 0 5px 5px 5px;
+  border-radius: 10px;
 }

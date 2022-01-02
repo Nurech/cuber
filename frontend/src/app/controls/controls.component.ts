@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { MatSliderChange } from '@angular/material/slider';
 import { Message } from '@stomp/stompjs';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { MessageService } from '../services/message.service';
 
 @Component({
   selector: 'app-controls',
@@ -21,19 +22,17 @@ export class ControlsComponent implements OnInit {
   isSolved: boolean = false;
   isStop: boolean = false;
   isLocked: boolean = true;
+  public userOnTab: string = '';
 
   constructor(private cubeControlService: CubeControlService,
-              private rxStompService: RxStompService) { }
+              private messageService: MessageService) { }
 
   ngOnInit(): void {
     const isSolved = this.cubeControlService.isSolved.subscribe(data => this.onSolved(data));
     const twistHappened = this.cubeControlService.twistHappened.subscribe(() => this.shouldFlushSolution());
-
-    this.rxStompService.watch('/topic/solutions').subscribe((message: Message) => {
-      this.useSolution(message.body);
-    });
-
-    this.subs.push(...[isSolved, twistHappened]);
+    const userTabSub = this.cubeControlService.userOnTab.subscribe(change => this.userOnTab = change.tab.textLabel);
+    const solutionSub = this.messageService.returnSolutionMoves.subscribe(solution => this.useSolution(solution));
+    this.subs.push(...[isSolved, twistHappened, userTabSub, solutionSub]);
   }
 
   ngOnDestroy() {
@@ -41,13 +40,12 @@ export class ControlsComponent implements OnInit {
   }
 
   getSolution() {
-    const message = this.cubeControlService.getCurrentStateString();
-    this.rxStompService.publish({destination: '/app/solution', body: message});
-    this.cubeControlService.cube.isSolving = true;
+    const state = this.cubeControlService.getCurrentStateString();
+    this.messageService.getSolution(state);
   }
 
-  useSolution(body: string) {
-    this.solution = [...this.cubeControlService.getSolutionMoves(body)];
+  useSolution(solutionMoves: string[]) {
+    this.solution = solutionMoves;
     this.solutionLength = this.solution.length;
     this.previousSteps = [];
     this.atStep = 0;

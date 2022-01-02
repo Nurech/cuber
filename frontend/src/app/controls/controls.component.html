@@ -11,31 +11,37 @@
 
 <div class="mid-controls-container alternate-theme" [ngClass]="{'show' : solution.length, 'hide' : !solution.length}">
 
-  <button mat-mini-fab class="control-button" color="primary" [disabled]="!previousSteps.length" (click)="onLeft()">
+  <button mat-mini-fab class="control-button"
+          color="primary"
+          [disabled]="!previousSteps.length"
+          (click)="onLeft()">
     <mat-icon [svgIcon]="'left'"></mat-icon>
   </button>
 
-  <button mat-mini-fab  class="control-button" color="primary" [disabled]="!solution.length" *ngIf="!isPlaying"
+  <button mat-mini-fab class="control-button" color="primary" [disabled]="!solution.length" *ngIf="!isPlaying"
           (click)="onPlay()">
     <mat-icon [svgIcon]="'play'"></mat-icon>
   </button>
-  <button mat-mini-fab  class="control-button" color="primary" [disabled]="!solution.length" *ngIf="isPlaying"
+  <button mat-mini-fab class="control-button" color="primary" [disabled]="!solution.length" *ngIf="isPlaying"
           (click)="onPause()">
     <mat-icon [svgIcon]="'pause'"></mat-icon>
   </button>
 
-  <button mat-mini-fab  class="control-button" [color]="'primary'" [disabled]="!solution.length" (click)="onRight()">
+  <button mat-mini-fab class="control-button" [color]="'primary'" [disabled]="!solution.length" (click)="onRight()">
     <mat-icon [svgIcon]="'right'"></mat-icon>
   </button>
 
 </div>
 
-<div class="side-controls-container alternate-theme" >
-  <button mat-mini-fab  class="right-control-button" [color]="'primary'" [disabled]="false" (click)="getSolution()">
+<div class="side-controls-container alternate-theme">
+  <button mat-mini-fab class="right-control-button"
+          [ngClass]="{'show-right' : (userOnTab == 'person')}"
+          [color]="'primary'" [disabled]="false" (click)="getSolution()">
     <mat-icon [svgIcon]="'auto_fix_high'"></mat-icon>
   </button>
-  <button mat-mini-fab class="right-control-button" [color]="'primary'" [disabled]="false"
-          [ngClass]="{'button-active' : isLocked}" (click)="changeLocked()">
+  <button mat-mini-fab class="right-control-button"
+          [ngClass]="{'show-right' : (userOnTab == 'person'), 'button-active' : isLocked}"
+          [color]="'primary'" [disabled]="false" (click)="changeLocked()">
     <mat-icon [svgIcon]="'360'"></mat-icon>
   </button>
 </div>

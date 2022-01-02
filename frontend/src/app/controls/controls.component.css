@@ -25,6 +25,8 @@
 
 .right-control-button {
   margin: 5px 0;
+  right: -100px;
+  transition: right 0.3s
 }
 
 .button-active {

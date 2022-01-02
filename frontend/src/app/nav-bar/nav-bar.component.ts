@@ -40,7 +40,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
     onTabChange(event: MatTabChangeEvent) {
         console.log(event);
-        this.cubeControlService.userOnTab.next(event.index);
+        this.cubeControlService.userOnTab.next(event);
     }
 
     changeLocked() {

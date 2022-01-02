@@ -19,3 +19,11 @@
   opacity: 0;
   transition: opacity 0.2s;
 }
+
+.version-text {
+  position: absolute;
+  right: 0;
+  margin: 1px;
+  font-size: 8px;
+  font-family: monospace;
+}

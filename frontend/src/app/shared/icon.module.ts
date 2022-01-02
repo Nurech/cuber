@@ -40,6 +40,10 @@ export class IconModule {
         .addSvgIcon('info', this.setPath(`${this.path}/icons/info_black_24dp.svg`))
         .addSvgIcon('videogame', this.setPath(`${this.path}/icons/videogame_asset_black_24dp.svg`))
         .addSvgIcon('close', this.setPath(`${this.path}/icons/close_black_24dp.svg`))
+        .addSvgIcon('person', this.setPath(`${this.path}/icons/person_black_24dp.svg`))
+        .addSvgIcon('group', this.setPath(`${this.path}/icons/groups_black_24dp.svg`))
+        .addSvgIcon('robot', this.setPath(`${this.path}/icons/smart_toy_black_24dp.svg`))
+        .addSvgIcon('help', this.setPath(`${this.path}/icons/help_outline_black_24dp.svg`))
         .addSvgIcon('live_tv', this.setPath(`${this.path}/icons/live_tv_black_24dp.svg`));
   }
 

@@ -69,3 +69,8 @@ body {
 .mat-tab-label {
   padding: 0 14px !important;
 }
+
+.show-right {
+  right: 0 !important;
+  transition: right 0.3s;
+}

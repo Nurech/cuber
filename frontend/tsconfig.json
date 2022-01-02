@@ -2,7 +2,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "types": ["jest", "node"],
+    "types": ["jest", "node", "uuid"],
     "typeRoots": [ "../node_modules/@types" ],
     "baseUrl": "./",
     "paths": {
