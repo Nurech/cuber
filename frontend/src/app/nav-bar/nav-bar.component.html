@@ -43,9 +43,9 @@
 <div class="status-container alternate-theme">
   <div class="left-container alternate-theme">
     <div class="col-header">connections</div>
-    <div class="row">Server status:{{backendConnection$|async}}</div>
+    <div class="row">Server status: {{backendConnection$|async}}</div>
     <div class="row">Robot status:</div>
-    <div class="row">Players connected:</div>
+    <div class="row">Players connected: {{connectedUsersCount$|async}}</div>
     <div class="row">Lobbies active:</div>
   </div>
 

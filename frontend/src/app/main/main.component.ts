@@ -12,10 +12,7 @@ declare var presets: any;
 export class MainComponent implements OnInit {
   private cube: any;
   public isSolved = true;
-  public isHidden = true;
-  public isLiveSolving = false;
   public userOnTab: string = '';
-  public receivedMessages: string[] = [];
   public appVersion: string;
 
   constructor(private cubeControlService: CubeControlService) {
@@ -133,7 +130,6 @@ export class MainComponent implements OnInit {
 
   private subscriptions() {
     this.cubeControlService.isSolved.subscribe(data => this.isSolved = data);
-    this.cubeControlService.isHidden.subscribe(data => this.isHidden = data);
     this.cubeControlService.currentCube.subscribe(cube => this.cube = cube);
     this.cubeControlService.userOnTab.subscribe(change => this.userOnTab = change.tab.textLabel);
   }

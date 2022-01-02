@@ -4,49 +4,58 @@ import { CubeControlService } from '../services/cube-control.service';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { MessageService } from '../services/message.service';
 
 @Component({
-    selector: 'app-nav-bar',
-    templateUrl: './nav-bar.component.html',
-    styleUrls: ['./nav-bar.component.css']
+  selector: 'app-nav-bar',
+  templateUrl: './nav-bar.component.html',
+  styleUrls: ['./nav-bar.component.css']
 })
 export class NavBarComponent implements OnInit, OnDestroy {
-    public isLiveSolving = true;
-    public isLocked: boolean = false;
-    public isCastConnected: boolean = true;
-    private subs: Subscription[] = [];
-    public robotConnection: boolean = false;
-    public backendConnection$: Observable<any> | undefined;
+  public isLiveSolving = true;
+  public isLocked: boolean = false;
+  public isCastConnected: boolean = true;
+  private subs: Subscription[] = [];
+  public robotConnection: boolean = false;
+  public backendConnection$: Observable<any> | undefined;
+  public connectedUsersCount$: Observable<any> | undefined;
 
-    constructor(private cubeControlService: CubeControlService,
-                public rxStompService: RxStompService) { }
+  constructor(private cubeControlService: CubeControlService,
+              private messageService: MessageService,
+              public rxStompService: RxStompService) { }
 
-    ngOnDestroy() {
-        this.subs.forEach(sub => sub.unsubscribe());
-    }
+  ngOnDestroy() {
+    this.subs.forEach(sub => sub.unsubscribe());
+  }
 
-    ngOnInit(): void {
-      const isLocked = this.cubeControlService.useLockedControls.subscribe(data => this.isLocked = data);
-      this.subs.push(...[isLocked]);
+  ngOnInit(): void {
+    const isLocked = this.cubeControlService.useLockedControls.subscribe(data => this.isLocked = data);
+    this.subs.push(...[isLocked]);
 
-      this.backendConnection$ = this.rxStompService.connectionState$.pipe(
-            map(state => {
-              console.log(state)
-                // convert numeric RxStompState to string
-                return RxStompState[state];
-            })
-        );
-    }
+    this.backendConnection$ = this.rxStompService.connectionState$.pipe(
+      map(state => {
+        console.log(state);
+        // convert numeric RxStompState to string
+        return RxStompState[state];
+      })
+    );
 
-    onTabChange(event: MatTabChangeEvent) {
-        console.log(event);
-        this.cubeControlService.userOnTab.next(event);
-    }
+    this.connectedUsersCount$ = this.messageService.connectedUsersCount.pipe(
+      map(count => {
+        return count;
+      })
+    );
+  }
 
-    changeLocked() {
-        this.isLocked = !this.isLocked;
-        this.cubeControlService.changeLocked(this.isLocked);
-    }
+  onTabChange(event: MatTabChangeEvent) {
+    console.log(event);
+    this.cubeControlService.userOnTab.next(event);
+  }
+
+  changeLocked() {
+    this.isLocked = !this.isLocked;
+    this.cubeControlService.changeLocked(this.isLocked);
+  }
 }
 
 export enum RxStompState {

@@ -19,6 +19,7 @@ export class MessageService {
 
   sessionContext: SessionContext = new SessionContext();
   returnSolutionMoves = new ReplaySubject<string[]>();
+  connectedUsersCount= new ReplaySubject<number>(0);
 
   constructor(private rxStompService: RxStompService,
               private cubeControlService: CubeControlService) {
@@ -40,6 +41,7 @@ export class MessageService {
 
     // Listen to backend returning solutions
     this.rxStompService.watch('/topic/solutions/'+this.sessionContext.token).subscribe((solution: Message) => {this.emitSolution(solution);});
+    this.rxStompService.watch('/topic/active-connections/').subscribe((count: Message) => {this.emitConnectedUsers(count);});
 
     localStorage.setItem('cuber-sessionContext', JSON.stringify(this.sessionContext));
   }
@@ -55,10 +57,25 @@ export class MessageService {
     });
   }
 
+  // Ask for a lobby to join to
+  // Watch for returned solution on /topic/lobby/{token}
+  getLobby(state: string) {
+    this.rxStompService.publish({
+      destination: '/app/lobby',
+      headers: {token: this.sessionContext.token},
+      body: state
+    });
+  }
+
   emitSolution(solution: Message) {
     console.log(solution);
     let solutionMoves = this.cubeControlService.getSolutionMoves(solution.body);
     this.returnSolutionMoves.next(solutionMoves);
+  }
+
+  private emitConnectedUsers(count: Message) {
+    console.log(count);
+    this.connectedUsersCount.next(parseInt(count.body));
   }
 
   updateUserName(userName: string) {
