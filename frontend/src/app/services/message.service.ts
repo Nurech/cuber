@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Message } from '@stomp/stompjs';
 import { InjectableRxStompConfig, RxStompService } from '@stomp/ng2-stompjs';
-import { ReplaySubject } from 'rxjs';
+import { BehaviorSubject, ReplaySubject } from 'rxjs';
 import { CubeControlService } from './cube-control.service';
 import { myRxStompConfig } from '../my-rx-stomp.config';
 import { UUID } from 'angular2-uuid';
+import { map } from 'rxjs/operators';
+import { RxStompState } from '../nav-bar/nav-bar.component';
 
 
 /**
@@ -18,8 +20,8 @@ import { UUID } from 'angular2-uuid';
 export class MessageService {
 
   sessionContext: SessionContext = new SessionContext();
-  returnSolutionMoves = new ReplaySubject<string[]>();
-  connectedUsersCount= new ReplaySubject<number>(0);
+  returnSolutionMoves = new ReplaySubject<string[]>(1);
+  connectedUsersCount= new BehaviorSubject<number>(0);
 
   constructor(private rxStompService: RxStompService,
               private cubeControlService: CubeControlService) {
@@ -39,10 +41,9 @@ export class MessageService {
     this.rxStompService.configure(stompConfig);
     this.rxStompService.activate();
 
-    // Listen to backend returning solutions
     this.rxStompService.watch('/topic/solutions/'+this.sessionContext.token).subscribe((solution: Message) => {this.emitSolution(solution);});
     this.rxStompService.watch('/topic/active-connections/').subscribe((count: Message) => {this.emitConnectedUsers(count);});
-
+    this.rxStompService.serverHeaders$.subscribe(data => console.log(data))
     localStorage.setItem('cuber-sessionContext', JSON.stringify(this.sessionContext));
   }
 

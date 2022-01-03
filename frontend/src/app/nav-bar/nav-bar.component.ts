@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { CubeControlService } from '../services/cube-control.service';
 import { Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { MessageService } from '../services/message.service';
 
@@ -40,12 +40,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.connectedUsersCount$ = this.messageService.connectedUsersCount.pipe(
-      map(count => {
-        return count;
-      })
-    );
+    this.connectedUsersCount$ = this.messageService.connectedUsersCount.pipe(data => {return data;})
   }
+
 
   onTabChange(event: MatTabChangeEvent) {
     console.log(event);
