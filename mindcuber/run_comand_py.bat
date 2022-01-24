@@ -1,0 +1,1 @@
+start cmd.exe /k "chdir "C:\Users\partsjoo\AppData\Local\lego-hub-tk-main" & run_command.py upload MCRIMTab4-v1p0-2.lms 17"

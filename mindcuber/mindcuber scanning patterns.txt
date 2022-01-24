@@ -1,0 +1,50 @@
+
+// colors
+white 0, 2, 0 	 6
+orange 2, 0, 0 	 1
+yellow 2, 1, 0 	 2
+green 0, 2, 0    4
+red 2, 0, 0   	 1
+blue 0, 0, 2     6
+
+
+// example output FACE (face cubelet color)
+2022-01-22 15:50:43,090 INFO comm.HubClient received non-JSON: FACE 0
+2022-01-22 15:50:43,429 INFO comm.HubClient received non-JSON: 0 8 1
+2022-01-22 15:50:43,715 INFO comm.HubClient received non-JSON: 0 2 6
+2022-01-22 15:50:43,910 INFO comm.HubClient received non-JSON: 0 3 1
+2022-01-22 15:50:44,094 INFO comm.HubClient received non-JSON: 0 4 6
+2022-01-22 15:50:44,279 INFO comm.HubClient received non-JSON: 0 5 6
+2022-01-22 15:50:44,480 INFO comm.HubClient received non-JSON: 0 6 6
+2022-01-22 15:50:44,666 INFO comm.HubClient received non-JSON: 0 7 1
+2022-01-22 15:50:44,855 INFO comm.HubClient received non-JSON: 0 0 6
+2022-01-22 15:50:45,099 INFO comm.HubClient received non-JSON: 0 1 6
+
+
+
+
+
+// face scanning order
+up right down back left front
+                  Back
+                   3
+              -----------
+            /    Up     /|
+           /     0     / |
+           -----------  Right
+          |           |  1
+    Left  |   Front   |  .
+     4    |     5     | /
+          |           |/
+           -----------
+               Down
+                2
+
+
+
+//face scan cubelet location codes
++-------+
+| 0 1 2 |
+| 7 8 3 |
+| 6 5 4 |
++-------+
