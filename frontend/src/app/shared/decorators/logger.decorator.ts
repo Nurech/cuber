@@ -1,11 +1,9 @@
 /**
  * Example:
  * @ngLog
- * method(param: string) { //some code}
  *
  * It would look quite unprofessional if we would ship the app with loggers on
  * So lets check if this app is in production or dev, if it is on production we disable loggers
- *
  */
 
 import { environment } from '../../../environments/environment';

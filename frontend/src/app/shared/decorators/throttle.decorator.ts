@@ -1,12 +1,6 @@
 /**
  * @param throttleMs (ms how long to throttle)
- * Usage: look example, provide @ngThrottle(3000) above a method to throttle firing
  */
-
-// @ngThrottle(3000)
-// callMe(name) {
-//   console.log('I am throttled');
-// }
 
 /**
  * Throttle a method

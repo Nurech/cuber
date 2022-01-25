@@ -9,3 +9,9 @@ pyudev; sys_platform == "linux"
 tqdm  
 mpy-cross==1.13
 websocket-client
+flask
+flask-socketio
+eventlet
+gunicorn
+websocket-client
+rel

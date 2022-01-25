@@ -1,14 +1,8 @@
 /**
  * @param timeout (ms how long to debounce)
  * @param cancelDebounce (cancels ongoing debounce and executes instantly whatever was waiting)
- * Usage: look example, provide @ngBounce(3000) above a method to debounce the method for 3 sec
- * Joosep
  */
 
-// @NgDebounce(3000)
-// callMe(name) {
-//   console.log('I am debouncing');
-// }
 /**
  * Debounce a method
  */

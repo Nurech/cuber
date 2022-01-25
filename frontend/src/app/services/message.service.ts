@@ -5,8 +5,6 @@ import { BehaviorSubject, ReplaySubject } from 'rxjs';
 import { CubeControlService } from './cube-control.service';
 import { myRxStompConfig } from '../my-rx-stomp.config';
 import { UUID } from 'angular2-uuid';
-import { map } from 'rxjs/operators';
-import { RxStompState } from '../nav-bar/nav-bar.component';
 
 
 /**

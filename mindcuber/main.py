@@ -176,7 +176,7 @@ def ScanPiece(spos, tpos, f, o, i, back=False):
     else:
         run_wt_up(motor_turn, tpos - 3)
     ScanRGB(f, o)
-    print(f, o, c.colors.get_clr(f, o))
+    print('SCANNING', f, o, c.colors.get_clr(f, o))
     off = Position(motor_scan) - spos
     if pos < spos:
         if off < -5:
