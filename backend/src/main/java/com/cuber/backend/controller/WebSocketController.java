@@ -30,4 +30,11 @@ public class WebSocketController {
         String lobby = "123";
         template.convertAndSend("/topic/lobbies/" + token, lobby);
     }
+
+    @MessageMapping("/scan")
+    public void sendScan(@Header String token, String data) throws Exception {
+        logger.info(String.valueOf(data));
+        logger.info(String.valueOf(token));
+        template.convertAndSend("/topic/scan/" + data);
+    }
 }

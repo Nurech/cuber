@@ -35,9 +35,15 @@ async def main():
 
 def _console_print(msg):
     print(msg)
+    substring = "SCANNING"
+    if msg.find(substring) != -1:
+        print("Found!")
+        asyncio.run(socket.send_message(msg))
+    else:
+        print("Not found!")
 
 
-def send_heartbeat_to_backend(connection):
+async def send_heartbeat_to_backend(connection):
     # TODO
     if connection == 0:
         print('HUB is offline')
@@ -55,26 +61,34 @@ def send_cube_map_to_backend(map):
     print(map)
 
 
-async def start_ws():
+class WebSocket:
     websocket.enableTrace(True)
-    ws = websocket.WebSocketApp("ws://localhost:8080/lobby",
+    ws = websocket.WebSocketApp("ws://localhost:8080/scan",
                                 on_open=on_open,
                                 on_message=on_message,
                                 on_error=on_error,
-                                on_close=on_close)
+                                on_close=on_close,
+                                header={"token": "robot"})
 
-    ws.run_forever(dispatcher=rel)  # Set dispatcher to automatic reconnection
-    rel.signal(2, rel.abort)  # Keyboard Interrupt
-    rel.dispatch()
+    async def start_ws(self):
+        self.ws.run_forever(dispatcher=rel)  # Set dispatcher to automatic reconnection
+        rel.signal(2, rel.abort)  # Keyboard Interrupt
+        rel.dispatch()
+
+    async def send_message(self, msg):
+        self.ws.send(msg)
+
+
+socket = WebSocket()
 
 
 def start_client():
-    asyncio.run(start_ws())
+    asyncio.run(socket.start_ws())
     print("Finished")
 
 
 while True:
-    send_heartbeat_to_backend(connection)
+    asyncio.run(send_heartbeat_to_backend(connection))
     time.sleep(0.1)
     if hm.connection_state == ConnectionState.TELEMETRY:
         if connection == 0:
