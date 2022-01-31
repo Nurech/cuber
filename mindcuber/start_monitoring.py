@@ -2,6 +2,8 @@ import time
 import websocket
 import asyncio
 import rel
+import stomper
+import threading
 
 from data.HubMonitor import HubMonitor
 from comm.HubClient import HubClient, ConnectionState
@@ -11,10 +13,13 @@ connection = 0
 client = HubClient()
 hm = HubMonitor(client)
 client.start()
+websocket.enableTrace(True)
 
 
-def on_message(ws, message):
-    print(message)
+def on_message(ws, msg):
+    frame = stomper.Frame()
+    unpacked_msg = stomper.Frame.unpack(frame, msg)
+    print("Received the message: " + str(unpacked_msg))
 
 
 def on_error(ws, error):
@@ -26,7 +31,27 @@ def on_close(ws, close_status_code, close_msg):
 
 
 def on_open(ws):
-    print("Opened connection")
+    ws.send("CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
+    sub = stomper.subscribe("/topic/scan", "MyuniqueId", ack="auto")
+    ws.send(sub)
+
+
+ws = websocket.WebSocketApp("ws://localhost:8080/scan",
+                            on_open=on_open,
+                            on_message=on_message,
+                            on_error=on_error,
+                            on_close=on_close,
+                            header={"token": "robot"})
+
+
+async def send_message(msg):
+    frame = stomper.Frame()
+    frame.cmd = "SEND"
+    frame.headers = {"token": "robot", "destination": "/app/scan"}
+    frame.body = msg
+    packed_msg = stomper.Frame.pack(frame)
+    print("Sending message: " + str(packed_msg))
+    ws.send(packed_msg)
 
 
 async def main():
@@ -38,7 +63,7 @@ def _console_print(msg):
     substring = "SCANNING"
     if msg.find(substring) != -1:
         print("Found!")
-        asyncio.run(socket.send_message(msg))
+        asyncio.run(send_message(msg))
     else:
         print("Not found!")
 
@@ -52,8 +77,8 @@ async def send_heartbeat_to_backend(connection):
     elif connection == 2:
         if not hm.execution_status[1]:
             print('Main program started on HUB')
-        if hm.execution_status[1]:
-            print('Main program running')
+    if hm.execution_status[1]:
+        print('Main program running')
 
 
 def send_cube_map_to_backend(map):
@@ -61,31 +86,13 @@ def send_cube_map_to_backend(map):
     print(map)
 
 
-class WebSocket:
-    websocket.enableTrace(True)
-    ws = websocket.WebSocketApp("ws://localhost:8080/scan",
-                                on_open=on_open,
-                                on_message=on_message,
-                                on_error=on_error,
-                                on_close=on_close,
-                                header={"token": "robot"})
-
-    async def start_ws(self):
-        self.ws.run_forever(dispatcher=rel)  # Set dispatcher to automatic reconnection
-        rel.signal(2, rel.abort)  # Keyboard Interrupt
-        rel.dispatch()
-
-    async def send_message(self, msg):
-        self.ws.send(msg)
+async def start_ws():
+    wst = threading.Thread(target=ws.run_forever)
+    wst.daemon = True
+    wst.start()
 
 
-socket = WebSocket()
-
-
-def start_client():
-    asyncio.run(socket.start_ws())
-    print("Finished")
-
+asyncio.run(main())
 
 while True:
     asyncio.run(send_heartbeat_to_backend(connection))
@@ -95,8 +102,9 @@ while True:
             connection = 1
         elif connection == 1:
             client.program_execute(1)
-            asyncio.run(main())
-            start_client()
+            asyncio.run(start_ws())
+            time.sleep(5)
+            # asyncio.run(send_message('456'))
             connection = 2
     else:
         print('waiting...')

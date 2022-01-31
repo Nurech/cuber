@@ -19,6 +19,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     // Create a Logger
     Logger logger = LoggerFactory.getLogger(WebSocketMessageBrokerConfigurer.class);
 
+
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/topic");

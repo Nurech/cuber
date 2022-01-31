@@ -9,6 +9,8 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
+import org.springframework.web.socket.messaging.SessionSubscribeEvent;
+import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,10 +30,17 @@ public class MessageService {
     @EventListener(SessionConnectEvent.class)
     public void handleWebsocketConnectListner(SessionConnectEvent event) {
         logger.info("Received a new web socket connection");
+        logger.info(String.valueOf(event));
         StompHeaderAccessor sha = StompHeaderAccessor.wrap(event.getMessage());
         connectedUsers.add(sha.getSessionId());
         addUserToLobby(sha.getSessionId());
         template.convertAndSend("/topic/active-connections/", connectedUsers.size());
+    }
+
+    @EventListener(SessionSubscribeEvent.class)
+    public void handleWebsocketSubscribeEvent(SessionSubscribeEvent event) {
+        logger.info("Received a subscribe");
+        logger.info(String.valueOf(event));
     }
 
     @EventListener(SessionDisconnectEvent.class)
