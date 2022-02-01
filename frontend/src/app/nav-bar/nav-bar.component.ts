@@ -19,6 +19,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   public robotConnection: boolean = false;
   public backendConnection$: Observable<any> | undefined;
   public connectedUsersCount$: Observable<any> | undefined;
+  public scanResults$: Observable<any> | undefined;
 
   constructor(private cubeControlService: CubeControlService,
               private messageService: MessageService,
@@ -30,7 +31,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const isLocked = this.cubeControlService.useLockedControls.subscribe(data => this.isLocked = data);
-    this.subs.push(...[isLocked]);
+
 
     this.backendConnection$ = this.rxStompService.connectionState$.pipe(
       map(state => {
@@ -41,6 +42,13 @@ export class NavBarComponent implements OnInit, OnDestroy {
     );
 
     this.connectedUsersCount$ = this.messageService.connectedUsersCount.pipe(data => {return data;})
+
+    this.scanResults$ = this.messageService.scanResults.pipe(data => {return data;})
+    const scanSub = this.messageService.scanResults.subscribe(data => {
+      this.cubeControlService.convertCuberScanToPaintCommand(data)
+    })
+
+    this.subs.push(isLocked, scanSub);
   }
 
 

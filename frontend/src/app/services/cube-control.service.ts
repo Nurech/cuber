@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
-import { Cubelet, Direction } from '../shared/models/cube-model';
+import { Color, Cubelet, Direction } from '../shared/models/cube-model';
 import { NgDebounce } from '../shared/decorators/debounce.decorator';
 import { LockControlsService } from './lock-controls.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
@@ -30,7 +30,7 @@ declare global {
 })
 export class CubeControlService {
   hideInvisibleFaces = false;
-  useLockedControls = new BehaviorSubject<boolean>(false);
+  useLockedControls = new BehaviorSubject<boolean>(true);
   twistDuration: number = 250;
 
   // Subs
@@ -47,7 +47,7 @@ export class CubeControlService {
   //                  0            1           2           3            4            5
   FACES_CSS = ['.faceFront', '.faceUp', '.faceRight', '.faceDown', '.faceLeft', '.faceBack'];
   //            0            1           2        3         4       5           6           7
-  COLORS = [window.GRAY, window.G, window.Y, window.B, window.R, window.O, window.W, window.COLORLESS, 'stickerLogo'];
+  COLORS: Color[] = [window.GRAY, window.G, window.Y, window.B, window.R, window.O, window.W, window.COLORLESS, 'stickerLogo'];
   COLOR_LETTER = ['H', 'G', 'Y', 'B', 'R', 'O', 'W', 'X'];
   defaultMap = [
 
@@ -122,12 +122,91 @@ export class CubeControlService {
 
 
   /**
+   * SCANNING 0 5 [449, 396, 250, 852]
+   * face, cubeletId, HEX
+   *
+                       face
+   //                  Back
+   //                    3
+   //               -----------
+   //             /  0  1  2   |
+   //     Top 0  /  7  8  3   | .
+   /            |   6  5  4  |  .
+   //            -----------  Right
+   //           |           |  1
+   //     Left  |   Front   |  .
+   //      4    |     5     | /
+   //           |           |/
+   //            -----------
+   //                Down
+   //                 2
+   */
+  convertCuberScanToPaintCommand(msg: string) {
+    let arr = msg.split('[');
+    let hexString = '[' + arr[1];
+    let hex = this.getHexArray(hexString);
+    if (hex.includes(NaN)) {
+      return;
+    }
+    let face = arr[0].split(' ')[1];
+    let cubelet = arr[0].split(' ')[2];
+    if (msg.slice(msg.length - 1) == '2') {
+      let cubeletColor = this.getCuberColorCodeFromHex('yellow')
+      console.log('yellow', cubeletColor)
+    } else if (msg.slice(msg.length - 1) == '4') {
+      let cubeletColor = this.getCuberColorCodeFromHex('green')
+      console.log('green', cubeletColor)
+    } else if (msg.slice(msg.length - 1) == '6') {
+      let color = this.isWhiteOrblue(hex);
+      let cubeletColor = this.getCuberColorCodeFromHex(color)
+      console.log(color, cubeletColor)
+    } else if (msg.slice(msg.length - 1) == '1') {
+      let color = this.isRedOrOrange(hex);
+      let cubeletColor = this.getCuberColorCodeFromHex(color)
+      console.log(color, cubeletColor)
+    }
+  }
+
+  getHexArray(hexString: string) {
+    let hex: number[] = [];
+    let hexArray = hexString.replace('[', '').replace(']', '').split(', ');
+    hex.push(parseInt(hexArray[0]), parseInt(hexArray[1]), parseInt(hexArray[2]));
+    return hex;
+  }
+
+  isWhiteOrblue(hex: number[]) {
+    if (hex[0] > 120 && hex[1] > 120 && hex[2] > 120){
+      return 'white'
+    } else {
+      return 'blue'
+    }
+  }
+
+  isRedOrOrange(hex: number[]) {
+    if (hex[1] < hex[2]){
+      return 'red'
+    } else {
+      return 'orange'
+    }
+  }
+
+  getCuberColorCodeFromHex(colorString: string) {
+    for (let i = 0; i < this.COLORS.length; i++) {
+      if (this.COLORS[i].name == colorString) {
+        return i;
+      }
+    }
+    return;
+  }
+
+
+  /**
    * Supply cubeletId, faceId, colorID
    */
   paintFace(cubeletId: number, faceId: number, colorId: number) {
     setTimeout(() => {
       const cubelet: Cubelet = this.cube.cubelets[cubeletId];
-      this.quickExplodeImplode(cubelet);
+      // this.quickExplodeImplode(cubelet);
       const direction: Direction = window.ERNO.Direction.getDirectionById(cubelet.faces[faceId].id);
       console.log(cubelet);
 
@@ -267,7 +346,7 @@ export class CubeControlService {
     if (this.cube) return;
 
     let container = document.getElementById('container');
-
+    console.log(window)
     let ua = navigator.userAgent,
       isIe = ua.indexOf('MSIE') > -1 || ua.indexOf('Trident/') > -1;
 

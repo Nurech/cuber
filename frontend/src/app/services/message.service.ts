@@ -19,6 +19,7 @@ export class MessageService {
 
   sessionContext: SessionContext = new SessionContext();
   returnSolutionMoves = new ReplaySubject<string[]>(1);
+  scanResults = new ReplaySubject<string>(1);
   connectedUsersCount= new BehaviorSubject<number>(0);
 
   constructor(private rxStompService: RxStompService,
@@ -41,6 +42,7 @@ export class MessageService {
 
     this.rxStompService.watch('/topic/solutions/'+this.sessionContext.token).subscribe((solution: Message) => {this.emitSolution(solution);});
     this.rxStompService.watch('/topic/active-connections/').subscribe((count: Message) => {this.emitConnectedUsers(count);});
+    this.rxStompService.watch('/topic/scan').subscribe((scan: Message) => {this.emitScanResults(scan);});
     this.rxStompService.serverHeaders$.subscribe(data => console.log(data))
     localStorage.setItem('cuber-sessionContext', JSON.stringify(this.sessionContext));
   }
@@ -75,6 +77,11 @@ export class MessageService {
   private emitConnectedUsers(count: Message) {
     console.log(count);
     this.connectedUsersCount.next(parseInt(count.body));
+  }
+
+  private emitScanResults(scan: Message) {
+    console.log(scan);
+    this.scanResults.next(scan.body);
   }
 
   updateUserName(userName: string) {

@@ -9,8 +9,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.websocket.OnMessage;
-import java.io.Reader;
 import java.util.Objects;
 
 @RestController
@@ -37,10 +35,9 @@ public class WebSocketController {
 
     @MessageMapping("/scan")
     public void sendScan(@Header String token, String data) throws Exception {
-//        logger.info(String.valueOf(token));
         if (Objects.equals(token, "robot")) {
             logger.info(String.valueOf(data));
+            template.convertAndSend("/topic/scan", data);
         }
-        template.convertAndSend("/topic/scan", data);
     }
 }

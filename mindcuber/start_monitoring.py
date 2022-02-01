@@ -19,7 +19,7 @@ websocket.enableTrace(True)
 def on_message(ws, msg):
     frame = stomper.Frame()
     unpacked_msg = stomper.Frame.unpack(frame, msg)
-    print("Received the message: " + str(unpacked_msg))
+    # print("Received the message: " + str(unpacked_msg))
 
 
 def on_error(ws, error):
@@ -50,7 +50,6 @@ async def send_message(msg):
     frame.headers = {"token": "robot", "destination": "/app/scan"}
     frame.body = msg
     packed_msg = stomper.Frame.pack(frame)
-    print("Sending message: " + str(packed_msg))
     ws.send(packed_msg)
 
 
@@ -59,13 +58,10 @@ async def main():
 
 
 def _console_print(msg):
-    print(msg)
-    substring = "SCANNING"
-    if msg.find(substring) != -1:
-        print("Found!")
+    if msg.find("SCANNING") != -1:
         asyncio.run(send_message(msg))
-    else:
-        print("Not found!")
+    elif msg.find("FACE") != -1:
+        asyncio.run(send_message(msg))
 
 
 async def send_heartbeat_to_backend(connection):
@@ -77,8 +73,8 @@ async def send_heartbeat_to_backend(connection):
     elif connection == 2:
         if not hm.execution_status[1]:
             print('Main program started on HUB')
-    if hm.execution_status[1]:
-        print('Main program running')
+    # if hm.execution_status[1]:
+    #     print('Main program running')
 
 
 def send_cube_map_to_backend(map):
@@ -104,7 +100,6 @@ while True:
             client.program_execute(1)
             asyncio.run(start_ws())
             time.sleep(5)
-            # asyncio.run(send_message('456'))
             connection = 2
     else:
         print('waiting...')

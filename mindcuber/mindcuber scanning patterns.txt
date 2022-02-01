@@ -48,3 +48,11 @@ up right down back left front
 | 7 8 3 |
 | 6 5 4 |
 +-------+
+
+
+white   6
+orange 1
+yellow 2
+green 4
+red 1
+blue 6

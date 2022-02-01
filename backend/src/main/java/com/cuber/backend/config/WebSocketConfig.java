@@ -1,7 +1,5 @@
 package com.cuber.backend.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -15,10 +13,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Order(Ordered.HIGHEST_PRECEDENCE + 99)
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-
-    // Create a Logger
-    Logger logger = LoggerFactory.getLogger(WebSocketMessageBrokerConfigurer.class);
-
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
